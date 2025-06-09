@@ -36,6 +36,7 @@ export ZDOTDIR="${ZDOTDIR:-$XDG_CONFIG_HOME/zsh}"
 export ZSH="$HOME/.local/share/oh-my-zsh"
 export ZSH_CACHE_DIR="$ZSH/cache"
 export ZSH_CUSTOM="$HOME/.config/zsh"
+export ZSH_UPDATE_TRIGGER_PATH="$XDG_RUNTIME_DIR/zsh_updated"
 
 if ! source $ZDOTDIR/.zshenv; then
   echo "FATAL Error: Could not source $ZDOTDIR/.zshenv"
