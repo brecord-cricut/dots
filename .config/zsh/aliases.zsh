@@ -1,5 +1,16 @@
 #!/usr/bin/env zsh
 
+notes() {
+  local notes_path="$HOME/Nextcloud/Notes"
+  if [[ -d $notes_path ]]; then
+    cd $notes_path
+    $EDITOR -c "lua require('persistence').load()" .
+    cd - >/dev/null
+  else
+    echo "Notes directory not found: $notes_path"
+  fi
+}
+
 zshc() {
   cd $ZSH_CUSTOM
   $EDITOR -c "lua require('persistence').load()"
