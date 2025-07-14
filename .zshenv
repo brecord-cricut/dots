@@ -21,6 +21,7 @@ export PAGER=less
 export REPOS="$XDG_DATA_HOME/repos"
 export TERMINAL=kitty
 
+export CUDA_CACHE_PATH="$XDG_CACHE_HOME/nv"
 export ZDOTDIR="${ZDOTDIR:-$XDG_CONFIG_HOME/zsh}"
 export ZSH="$HOME/.local/share/oh-my-zsh"
 export ZSH_CACHE_DIR="$ZSH/cache"
