@@ -31,3 +31,5 @@ _symlink_config_dir() {
     }
   fi
 }
+
+_symlink_config_dir lazygit
