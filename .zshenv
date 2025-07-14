@@ -23,6 +23,7 @@ export TERMINAL=kitty
 
 export CARGO_HOME="$XDG_CACHE_HOME/cargo"
 export CUDA_CACHE_PATH="$XDG_CACHE_HOME/nv"
+export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
 export PASSWORD_STORE_DIR="$REPOS/password-store/"
 export ZDOTDIR="${ZDOTDIR:-$XDG_CONFIG_HOME/zsh}"
 export ZSH="$HOME/.local/share/oh-my-zsh"
