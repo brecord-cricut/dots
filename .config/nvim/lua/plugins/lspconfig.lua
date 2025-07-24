@@ -4,6 +4,7 @@ return {
     inlay_hints = { enabled = false },
     servers = {
       bashls = { filetypes = { "sh", "zsh" } },
+      hyprls = vim.uv.os_uname().sysname == "Linux" and {},
     },
   },
   keys = {
