@@ -14,3 +14,14 @@ if [[ $(uname) == "Darwin" ]]; then
   launchctl setenv PAGER $PAGER
   launchctl setenv TERMINAL $TERMINAL
 fi
+
+_updateUserSettings() {
+  for var in BROWSER EDITOR PAGER TERMINAL; do
+    local value="${(P)var}"
+    local file="$XDG_CONFIG_HOME/user/${var:l}"
+    if [[ ! -f "$file" ]] || [[ "$(cat "$file" 2>/dev/null)" != "$value" ]]; then
+      echo "$value" > "$file"
+    fi
+  done
+}
+_updateUserSettings
