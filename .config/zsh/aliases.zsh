@@ -19,8 +19,16 @@ zshc() {
   cd - >/dev/null
 }
 
+repos() {
+  local dir="$REPOS/$1"
+  [[ -d $dir ]] && cd $dir || echo "\"$dir\" is not a directory."
+}
+_reposCompletion() {
+  compadd -- ${(f)"$(ls -1d $REPOS/*(/) 2>/dev/null | xargs -n1 basename)"}
+}
+compdef _reposCompletion repos
+
 alias nv="$EDITOR"
-alias repos="cd $XDG_DATA_HOME/repos"
 alias wget="wget --hsts-file=$XDG_CACHE_HOME/wget-hsts"
 
 if command -v nproc &>/dev/null; then
