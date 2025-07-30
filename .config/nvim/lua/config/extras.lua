@@ -1,4 +1,6 @@
 return {
+  { import = "lazyvim.plugins.extras.ai.copilot" },
+  { import = "lazyvim.plugins.extras.ai.copilot-chat" },
   { import = "lazyvim.plugins.extras.coding.mini-surround" },
   { import = "lazyvim.plugins.extras.dap.core" },
   { import = "lazyvim.plugins.extras.lang.clangd" },
