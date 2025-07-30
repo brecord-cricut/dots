@@ -33,3 +33,4 @@ _symlink_config_dir() {
 }
 
 _symlink_config_dir lazygit
+_symlink_config_dir qutebrowser
