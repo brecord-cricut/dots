@@ -1,9 +1,6 @@
-[[ $(uname) != "Darwin" ]] && return
+[[ $OSNAME != darwin* ]] && return
 
-launchctl setenv BROWSER $BROWSER
-launchctl setenv EDITOR $EDITOR
-launchctl setenv PAGER $PAGER
-launchctl setenv TERMINAL $TERMINAL
+alias ls="ls -G"
 
 _symlink_config_dir() {
   local name="$1"
@@ -32,6 +29,11 @@ _symlink_config_dir() {
     }
   fi
 }
-
 _symlink_config_dir lazygit
 _symlink_config_dir qutebrowser
+unset -f _symlink_config_dir
+
+launchctl setenv BROWSER $BROWSER
+launchctl setenv EDITOR $EDITOR
+launchctl setenv PAGER $PAGER
+launchctl setenv TERMINAL $TERMINAL
