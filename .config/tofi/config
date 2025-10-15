@@ -1,0 +1,20 @@
+border-width = 0
+drun-launch=true
+num-results = 12
+outline-width = 0
+padding-bottom = 5%
+padding-left = 5%
+padding-top = 5%
+result-spacing = 16
+
+height = 60%
+width = 60%
+
+font = JetBrainsMono
+font-size = 24
+
+prompt-text = " : "
+
+background-color = #0c0c0ad9
+text-color = #ebd9b350
+selection-color = #ebd9b3
