@@ -9,7 +9,11 @@ notes() {
     echo "Notes directory not found: $notes_path"
     return
   fi
-  cd $notes_path
-  $EDITOR
-  cd - >/dev/null
+  if [[ "$1" == "d" ]]; then
+    cd $notes_path && pwd
+  else
+    cd $notes_path
+    nvim
+    cd - >/dev/null
+  fi
 }
