@@ -3,8 +3,12 @@
 
 nvimc() {
   cd $XDG_CONFIG_HOME/nvim
-  $EDITOR -c "lua require('persistence').load()"
-  cd - >/dev/null
+  if [[ "$1" == "d" ]]; then
+    pwd
+  else
+    nvim -c "PersistenceLoad"
+    cd - >/dev/null
+  fi
 }
 
 plugins+=vi-mode
