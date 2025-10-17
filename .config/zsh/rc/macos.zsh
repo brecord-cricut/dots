@@ -1,8 +1,9 @@
-[[ $OSNAME != darwin* ]] && return
+[[ $(uname) != "Darwin" ]] && return
+[[ -x /opt/homebrew/bin/brew ]] && eval $(/opt/homebrew/bin/brew shellenv zsh)
 
 alias ls="ls -G"
 
-_symlink_config_dir() {
+symlink_config_dir() {
   local name="$1"
   if [[ -z "$name" ]]; then
     echo "Usage: _symlink_config_dir <config_dir_name>" >&2
@@ -29,9 +30,9 @@ _symlink_config_dir() {
     }
   fi
 }
-_symlink_config_dir lazygit
-_symlink_config_dir qutebrowser
-unset -f _symlink_config_dir
+symlink_config_dir lazygit
+symlink_config_dir qutebrowser
+unset -f symlink_config_dir
 
 launchctl setenv BROWSER $BROWSER
 launchctl setenv EDITOR $EDITOR
