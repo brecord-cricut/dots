@@ -1,9 +1,3 @@
-export BROWSER=firefox
-export EDITOR=nvim
-export PAGER=less
-export REPOS="$XDG_DATA_HOME/repos"
-export TERMINAL=kitty
-
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
 export CMAKE_PREFIX="$HOME/.local"
 export CUDA_CACHE_PATH="$XDG_CACHE_HOME/nv"
@@ -11,11 +5,9 @@ export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
 export GNUPGHOME="$XDG_CONFIG_HOME/gnupg"
 export GOMODCACHE="$XDG_CACHE_HOME/go/mod"
 export GOPATH="$XDG_DATA_HOME/go"
-export NEXTCLOUD_DIR=$XDG_DATA_HOME/Nextcloud
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npmrc"
 export NVMRC_PATH="$XDG_CONFIG_HOME/nvmrc"
 export NVM_DIR="$XDG_DATA_HOME/nvm"
-export PASSWORD_STORE_DIR="$REPOS/password-store/"
 export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
 export ZSH_CACHE_DIR="$XDG_CACHE_HOME/zsh"
 export ZSH_STALE_PATH="$XDG_RUNTIME_DIR/zsh_stale"
