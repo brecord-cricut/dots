@@ -67,6 +67,7 @@ zshc() {
 alias dflg="lazygit --git-dir=$REPOS/dots --work-tree=$HOME"
 alias dots="git --git-dir=$REPOS/dots --work-tree=$HOME"
 alias lg="lazygit"
+alias ld="lazydocker"
 alias ls="ls --color=auto"
 alias ll="ls -la"
 alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
