@@ -1,5 +1,3 @@
-[[ -r "$XDG_CONFIG_HOME/git/env" ]] && source "$XDG_CONFIG_HOME/git/env"
-
 if [[ -z "$GIT_AUTHOR_NAME" || -z "$GIT_AUTHOR_EMAIL" ]]; then
   printf "git user context is missing.\n"
   printf "Enter your Git author name: "
@@ -10,25 +8,15 @@ if [[ -z "$GIT_AUTHOR_NAME" || -z "$GIT_AUTHOR_EMAIL" ]]; then
     printf "Error: Both Git author name and email are required.\n"
     return 1
   fi
-  mkdir -p "$XDG_CONFIG_HOME/git"
-  cat <<-EOF >"$XDG_CONFIG_HOME/git/env"
+  local env_path="$ZSH_STATE/env/git.zsh"
+  [[ -d "$(dirname $env_path)" ]] || mkdir -p "$(dirname $env_path)"
+  cat <<-EOF >"$env_path"
 			export GIT_AUTHOR_NAME="$git_name"
 			export GIT_AUTHOR_EMAIL="$git_email"
 			export GIT_COMMITTER_NAME="$git_name"
 			export GIT_COMMITTER_EMAIL="$git_email"
 	EOF
-  chmod 600 "$XDG_CONFIG_HOME/git/env"
-  source "$XDG_CONFIG_HOME/git/env"
-  unset -v git_name git_email
+  chmod 600 "$env_path"
+  source "$env_path"
+  unset -v env_path git_name git_email
 fi
-
-gitc() {
-  cd "$XDG_CONFIG_HOME/git"
-  case "$1" in
-  "d") pwd ;;
-  *)
-    nvim
-    cd - >/dev/null
-    ;;
-  esac
-}
