@@ -1,0 +1,6 @@
+alias dflg="lazygit --git-dir=$REPOS/dots --work-tree=$HOME"
+alias dots="git --git-dir=$REPOS/dots --work-tree=$HOME"
+alias ld="lazydocker"
+alias lg="lazygit"
+alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
+alias wget="wget --hsts-file=$XDG_CACHE_HOME/wget-hsts"

@@ -1,26 +1,21 @@
-export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
-export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
-export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
-export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
+: ${XDG_CACHE_HOME:=$HOME/.cache}
+: ${XDG_CONFIG_HOME:=$HOME/.config}
+: ${XDG_DATA_HOME:=$HOME/.local/share}
+: ${XDG_STATE_HOME:=$HOME/.local/state}
+: ${XDG_RUNTIME_DIR:=/run/user/$UID}
 
-if [[ -z "$XDG_RUNTIME_DIR" ]]; then
-  if [[ "$(uname -s)" == "Darwin" ]]; then
-    export XDG_RUNTIME_DIR="$(getconf DARWIN_USER_TEMP_DIR 2>/dev/null)"
-  fi
-  if [[ -z "$XDG_RUNTIME_DIR" ]]; then
-    export XDG_RUNTIME_DIR=/tmp
+if [[ ! -d $XDG_RUNTIME_DIR || ! -w $XDG_RUNTIME_DIR ]]; then
+  if [[ $OSTYPE == darwin* ]] && dir=$(getconf DARWIN_USER_TEMP_DIR 2>/dev/null) && [[ -d $dir ]]; then
+    XDG_RUNTIME_DIR=$dir
+  else
+    XDG_RUNTIME_DIR=$XDG_CACHE_HOME/zsh-runtime
+    mkdir -pm 700 $XDG_RUNTIME_DIR
   fi
 fi
 
-for dir in "$XDG_CACHE_HOME" "$XDG_CONFIG_HOME" "$XDG_DATA_HOME" "$XDG_STATE_HOME"; do
-  [[ -d "$dir" ]] || mkdir -p "$dir"
-done
+export XDG_CACHE_HOME XDG_CONFIG_HOME XDG_DATA_HOME XDG_STATE_HOME XDG_RUNTIME_DIR
 
-export BROWSER=firefox
-export EDITOR=nvim
-export NEXTCLOUD_DIR="$XDG_DATA_HOME/Nextcloud"
-export PAGER=less
-export PASSWORD_STORE_DIR="$REPOS/password-store/"
-export REPOS="$XDG_DATA_HOME/repos"
-export TERMINAL=kitty
-export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
+typeset -gx ZDOTDIR=$XDG_CONFIG_HOME/zsh
+typeset -gx ZSH_CACHE=$XDG_CACHE_HOME/zsh
+typeset -gx ZSH_DATA=$XDG_DATA_HOME/zsh
+typeset -gx ZSH_STATE=$XDG_STATE_HOME/zsh

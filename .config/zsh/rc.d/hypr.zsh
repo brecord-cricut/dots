@@ -1,7 +1,3 @@
-#!/usr/bin/zsh
-
-[[ -d "$XDG_CONFIG_HOME/hypr" ]] || return
-
 hyprc() {
   cd "$XDG_CONFIG_HOME/hypr"
   case "$1" in

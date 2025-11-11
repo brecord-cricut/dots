@@ -1,5 +1,4 @@
-[[ $(uname) != "Darwin" ]] && return
-[[ -x /opt/homebrew/bin/brew ]] && eval $(/opt/homebrew/bin/brew shellenv zsh)
+[[ $OSTYPE != darwin* ]] && return 0
 
 alias ls="ls -G"
 
@@ -30,11 +29,11 @@ symlink_config_dir() {
     }
   fi
 }
+
 symlink_config_dir lazygit
 symlink_config_dir qutebrowser
 unset -f symlink_config_dir
 
-launchctl setenv BROWSER $BROWSER
-launchctl setenv EDITOR $EDITOR
-launchctl setenv PAGER $PAGER
-launchctl setenv TERMINAL $TERMINAL
+[[ -n "$BROWSER" ]] && launchctl setenv BROWSER $BROWSER
+[[ -n "$EDITOR" ]] && launchctl setenv EDITOR $EDITOR
+[[ -n "$PAGER" ]] && launchctl setenv PAGER $PAGER

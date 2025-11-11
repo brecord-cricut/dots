@@ -1,33 +1,14 @@
-export CARGO_HOME="$XDG_DATA_HOME/cargo"
-export CMAKE_PREFIX="$HOME/.local"
-export CUDA_CACHE_PATH="$XDG_CACHE_HOME/nv"
-export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
-export GNUPGHOME="$XDG_CONFIG_HOME/gnupg"
-export GOMODCACHE="$XDG_CACHE_HOME/go/mod"
-export GOPATH="$XDG_DATA_HOME/go"
-export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npmrc"
-export NVMRC_PATH="$XDG_CONFIG_HOME/nvmrc"
-export NVM_DIR="$XDG_DATA_HOME/nvm"
-export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
-export ZSH_CACHE_DIR="$XDG_CACHE_HOME/zsh"
-export ZSH_STALE_PATH="$XDG_RUNTIME_DIR/zsh_stale"
+typeset -U path fpath
+typeset -TU PATH path
+typeset -TU FPATH fpath
 
-if [[ "$(uname -s)" == "Darwin" ]]; then
-  export JAVA_HOME="$HOMEBREW_CELLAR/openjdk/24.0.1"
-elif [[ "$(uname -s)" == "Linux" ]]; then
-  export JAVA_HOME="$XDG_DATA_HOME/openjdk/current"
-fi
+path=($XDG_DATA_HOME/{cargo,go,npm}/bin(N-/) $path)
+path=($XDG_DATA_HOME/gem/ruby/*/bin(N-/) $path)
+path=(/usr/local/{,s}bin(N-/) $path)
 
-[[ -d "$HOME/.local/bin" ]] && path=("$HOME/.local/bin" $path)
-[[ -d "$HOME/.pub-cache/bin" ]] && path+=("$HOME/.pub-cache/bin")
-[[ -d "$JAVA_HOME" ]] && path=("$JAVA_HOME/bin" $path)
-[[ -d "$NEXTCLOUD_DIR/bin" ]] && path=("$NEXTCLOUD_DIR/bin" $path)
+for f in {"$ZSH_DATA"/env,"$ZSH_STATE"/env,"$ZDOTDIR"/env.d}/*.zsh(N); do
+  . "$f"
+done
+unset -v f
 
-if [[ -d "$ZDOTDIR"/env ]]; then
-  for file in "$ZDOTDIR"/env/*.zsh; do
-    if [[ -r "$file" ]]; then
-      source "$file"
-    fi
-  done
-  unset -v file
-fi
+typeset -U path
