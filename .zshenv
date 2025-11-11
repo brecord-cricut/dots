@@ -18,9 +18,11 @@ done
 
 export BROWSER=firefox
 export EDITOR=nvim
-export NEXTCLOUD_DIR="$XDG_DATA_HOME/Nextcloud"
 export PAGER=less
-export PASSWORD_STORE_DIR="$REPOS/password-store/"
-export REPOS="$XDG_DATA_HOME/repos"
 export TERMINAL=kitty
+
+export REPOS="$XDG_DATA_HOME/repos"
+
+export NEXTCLOUD_DIR="$XDG_DATA_HOME/Nextcloud"
+export PASSWORD_STORE_DIR="$REPOS/password-store/"
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"

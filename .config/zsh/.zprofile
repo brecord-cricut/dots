@@ -23,9 +23,9 @@ fi
 [[ -d "$JAVA_HOME" ]] && path=("$JAVA_HOME/bin" $path)
 [[ -d "$NEXTCLOUD_DIR/bin" ]] && path=("$NEXTCLOUD_DIR/bin" $path)
 
-if [[ -d "$ZDOTDIR"/env ]]; then
+if [ -d "$ZDOTDIR"/env ]; then
   for file in "$ZDOTDIR"/env/*.zsh; do
-    if [[ -r "$file" ]]; then
+    if [ -r "$file" ]; then
       source "$file"
     fi
   done

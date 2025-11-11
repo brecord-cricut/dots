@@ -1,4 +1,6 @@
-[[ -r "$XDG_CONFIG_HOME/git/env" ]] && source "$XDG_CONFIG_HOME/git/env"
+git_env="$XDG_CACHE_HOME/$USER/git.env"
+
+[[ -r "$git_env" ]] && source "$git_env"
 
 if [[ -z "$GIT_AUTHOR_NAME" || -z "$GIT_AUTHOR_EMAIL" ]]; then
   printf "git user context is missing.\n"
@@ -11,14 +13,14 @@ if [[ -z "$GIT_AUTHOR_NAME" || -z "$GIT_AUTHOR_EMAIL" ]]; then
     return 1
   fi
   mkdir -p "$XDG_CONFIG_HOME/git"
-  cat <<-EOF >"$XDG_CONFIG_HOME/git/env"
+  cat <<-EOF >"$git_env"
 			export GIT_AUTHOR_NAME="$git_name"
 			export GIT_AUTHOR_EMAIL="$git_email"
 			export GIT_COMMITTER_NAME="$git_name"
 			export GIT_COMMITTER_EMAIL="$git_email"
 	EOF
-  chmod 600 "$XDG_CONFIG_HOME/git/env"
-  source "$XDG_CONFIG_HOME/git/env"
+  chmod 600 "$git_env"
+  source "$git_env"
   unset -v git_name git_email
 fi
 
@@ -32,3 +34,5 @@ gitc() {
     ;;
   esac
 }
+
+unset -v git_env
