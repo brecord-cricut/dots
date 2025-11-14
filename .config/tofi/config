@@ -15,6 +15,6 @@ font-size = 24
 
 prompt-text = " : "
 
-background-color = #0c0c0ad9
-text-color = #ebd9b350
-selection-color = #ebd9b3
+background-color = #0B1010d9
+text-color = #adbec350
+selection-color = #adbec3
