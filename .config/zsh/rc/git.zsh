@@ -21,3 +21,14 @@ if [[ -z "$GIT_AUTHOR_NAME" || -z "$GIT_AUTHOR_EMAIL" ]]; then
   source "$XDG_CONFIG_HOME/git/env"
   unset -v git_name git_email
 fi
+
+gitc() {
+  cd "$XDG_CONFIG_HOME/git"
+  case "$1" in
+  "d") pwd ;;
+  *)
+    nvim
+    cd - >/dev/null
+    ;;
+  esac
+}
