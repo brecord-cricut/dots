@@ -1,12 +1,5 @@
 [[ ! -t 0 ]] && return
 
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.config/zsh/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
 _refresh_zsh() {
   if [[ -f $ZSH_UPDATE_TRIGGER_PATH ]]; then
     echo "Sourcing $HOME/.zshrc..."
@@ -83,10 +76,4 @@ if [[ -d "$ZDOTDIR"/rc ]]; then
     fi
   done
   unset -v file
-fi
-
-if [[ -n $DISPLAY || -n $WAYLAND_DISPLAY || $OSTYPE == darwin* ]]; then
-  [[ ! -f $ZDOTDIR/.p10k.zsh ]] || source $ZDOTDIR/.p10k.zsh
-else
-  [[ ! -f $ZDOTDIR/.p10k.tty.zsh ]] || source $ZDOTDIR/.p10k.tty.zsh
 fi
