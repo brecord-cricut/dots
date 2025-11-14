@@ -1,6 +1,6 @@
 --[[
 This file sets up Neovim autocommands to detect modifications to Zsh
-configuration files—specifically, any files within the directory specified by
+configuration files. Specifically, any files within the directory specified by
 `ZDOTDIR` and the `~/.zshenv` file. If changes are made to these files during a
 Neovim session, a file at the path defined by the `ZSH_STALE_PATH` environment
 variable will be created upon exit, signaling that the Zsh configuration has
