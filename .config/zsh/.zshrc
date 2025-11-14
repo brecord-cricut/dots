@@ -59,7 +59,6 @@ zshc() {
   cd - >/dev/null
 }
 
-[[ -d "$NVM_DIR" ]] && source $NVM_DIR/nvm.sh
 [[ -d "$XDG_CACHE_HOME/user" ]] || mkdir -p "$XDG_CACHE_HOME/user"
 [[ -d "$XDG_CONFIG_HOME/user" ]] || mkdir -p "$XDG_CONFIG_HOME/user"
 [[ -d "$XDG_DATA_HOME/user" ]] || mkdir -p "$XDG_DATA_HOME/user"
