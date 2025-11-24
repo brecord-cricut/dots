@@ -34,9 +34,9 @@ if [[ -r "$p10k_home/powerlevel10k.zsh-theme" ]]; then
 fi
 
 if [[ -n $DISPLAY || -n $WAYLAND_DISPLAY || $OSTYPE == darwin* ]]; then
-  [[ ! -f $ZSH_CACHE_DIR/.p10k.zsh ]] || source $ZSH_CACHE_DIR/.p10k.zsh
+  [[ ! -f "$XDG_DATA_HOME/p10k.zsh" ]] || source "$XDG_DATA_HOME/p10k.zsh"
 else
-  [[ ! -f $ZSH_CACHE_DIR/.p10k.tty.zsh ]] || source $ZSH_CACHE_DIR/.p10k.tty.zsh
+  [[ ! -f "$XDG_DATA_HOME/p10k.tty.zsh" ]] || source "$XDG_DATA_HOME/p10k.tty.zsh"
 fi
 
 unset -v p10k_home

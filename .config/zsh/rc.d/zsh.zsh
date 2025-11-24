@@ -1,17 +1,11 @@
+export ZSH_STALE_PATH="$XDG_RUNTIME_DIR/zsh_stale"
+
 zstyle :compinstall filename "$ZDOTDIR/.zshrc"
 
 autoload -z edit-command-line
 zle -N edit-command-line
 bindkey -M vicmd E edit-command-line
 bindkey '^R' history-incremental-search-backward
-
-_refresh_zsh() {
-  if [ -f $ZSH_UPDATE_TRIGGER_PATH ]; then
-    echo "Sourcing $HOME/.zshrc..."
-    source ~/.zshrc
-    rm -f "$ZSH_UPDATE_TRIGGER_PATH"
-  fi
-}
 
 zshc() {
   cd "$ZDOTDIR"
