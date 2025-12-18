@@ -4,6 +4,7 @@
 
 vim.opt.clipboard = "" -- Disables yank to system clipboard
 vim.opt.foldmethod = "manual"
+vim.opt.exrc = true
 
 if vim.env.HOMEBREW_PREFIX ~= nil then
   local fzf_dir = vim.env.HOMEBREW_PREFIX .. "/opt/fzf"
