@@ -1,5 +1,5 @@
 hs.hotkey.bind({ "cmd" }, "B", function()
-	local path = os.getenv("HOME") .. "/.config/user/browser"
+	local path = os.getenv("HOME") .. "/.local/state/browser"
 	if not hs.fs.attributes(path) then
 		print("Browser config file not found: " .. path)
 		return

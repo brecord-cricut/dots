@@ -1,5 +1,5 @@
 hs.hotkey.bind({ "cmd" }, "return", function()
-	local path = os.getenv("HOME") .. "/.config/user/terminal"
+	local path = os.getenv("HOME") .. "/.local/state/terminal"
 	if not hs.fs.attributes(path) then
 		print("Terminal config file not found: " .. path)
 		return
