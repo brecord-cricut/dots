@@ -9,7 +9,7 @@ hyprc() {
   esac
 }
 
-if command -v Hyprland >/dev/null; then
+if command -v start-hyprland >/dev/null; then
   if [ ! -f "$XDG_CONFIG_HOME/hypr/style.conf" ]; then
     wallpaper="$(find "$XDG_DATA_HOME/wallpapers" -maxdepth 1 -type f | head -n 1)"
     if [ ! -r "$wallpaper" ]; then
@@ -20,6 +20,6 @@ if command -v Hyprland >/dev/null; then
   fi
 
   if [[ "$(tty)" == "/dev/tty1" ]]; then
-    pgrep -x Hyprland >/dev/null || Hyprland &
+    pgrep -x Hyprland >/dev/null || start-hyprland &
   fi
 fi
