@@ -1,7 +1,7 @@
 export REPOS="$XDG_DATA_HOME/repos"
 
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
-export CMAKE_PREFIX="$HOME/.local"
+export CMAKE_INSTALL_PREFIX="$HOME/.local"
 export CUDA_CACHE_PATH="$XDG_CACHE_HOME/nv"
 export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
 export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --border=sharp --no-scrollbar"
