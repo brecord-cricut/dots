@@ -11,7 +11,6 @@ return {
 
     return {
       adapters = {
-        ["neotest-dart"] = {},
         ["neotest-gtest"] = {},
       },
       -- Icons for test statuses and UI elements
