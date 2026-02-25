@@ -61,8 +61,15 @@ local git_hub_override = {
 
 ---@type GxPattern
 local dev_ops_override = {
-  pattern = "^[%[|(]?AB#(%d+)[%)|%]]?$",
+  pattern = {
+    "^AB#(%d+)$",
+    "^%[AB#(%d+)%]$",
+    "^%(AB#(%d+)%)$",
+    "^AB#(%d+):$",
+    "^AB#(%d+)|$",
+  },
   url = function(ticket_num)
+    vim.notify("Hit")
     local gx = vim.g.gx or {}
     local dev_ops = gx.DevOps or {}
     local org, proj = dev_ops.org, dev_ops.proj
