@@ -1,5 +1,5 @@
 ---@class GxPattern
----@field pattern string Lua pattern used to find an override match. May contain a capture; captured value is passed to `url`.
+---@field pattern string|string[] Lua pattern(s) used to find an override match. May contain a capture; captured value is passed to `url`.
 ---@field url fun(capture: string): string|nil Function that receives the capture group and returns a URL. Return `nil` or an empty string to signal failure.
 ---
 ---@class GxConfig
@@ -39,19 +39,28 @@ function M.open_custom_url()
   local word = vim.fn.expand("<cWORD>")
 
   for _, pattern_def in ipairs(M.config.patterns) do
-    local capture = word:match(pattern_def.pattern)
-    if capture and pattern_def.url then
-      local url = pattern_def.url(capture)
-      if not url or url == "" then
+    local patterns = type(pattern_def.pattern) == "table" and pattern_def.pattern or { pattern_def.pattern }
+
+    for _, pattern in ipairs(patterns) do
+      local capture = word:match(pattern)
+      if capture and pattern_def.url then
+        local url = pattern_def.url(capture)
+        if not url or url == "" then
+          goto continue
+        end
+        vim.notify("Opening: " .. url, vim.log.levels.TRACE)
+        open_url(url)
         return
       end
-      vim.notify("Opening: " .. url, vim.log.levels.TRACE)
-      open_url(url)
-      return
+      ::continue::
     end
   end
 
-  vim.api.nvim_feedkeys("gx", "n", false)
+  if vim.fn.has("nvim-0.10") == 1 then
+    vim.ui.open(word)
+  else
+    vim.notify("Neovim version >=0.10 expected to open URLs")
+  end
 end
 
 ---@param opts GxConfig
