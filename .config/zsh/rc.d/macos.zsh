@@ -37,3 +37,6 @@ unset -f symlink_config_dir
 [[ -n "$BROWSER" ]] && launchctl setenv BROWSER $BROWSER
 [[ -n "$EDITOR" ]] && launchctl setenv EDITOR $EDITOR
 [[ -n "$PAGER" ]] && launchctl setenv PAGER $PAGER
+
+# For some reason mac opens the terminal at the root directory
+cd "$HOME"
