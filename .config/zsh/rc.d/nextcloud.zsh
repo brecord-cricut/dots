@@ -1,6 +1,7 @@
-NEXTCLOUD_DIR="$XDG_DATA_HOME/Nextcloud"
+NEXTCLOUD_DIR="${NEXTCLOUD_DIR:-$XDG_DATA_HOME/Nextcloud}"
 
-[[ -d "$NEXTCLOUD_DIR/bin" ]] && path=("$NEXTCLOUD_DIR/bin" $path[@]) || return 0
+[[ -d "$NEXTCLOUD_DIR" ]] || return 0
+[[ -d "$NEXTCLOUD_DIR/bin" ]] && path=("$NEXTCLOUD_DIR/bin" $path[@])
 
 export NEXTCLOUD_DIR
 
