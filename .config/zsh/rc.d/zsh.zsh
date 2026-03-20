@@ -5,7 +5,7 @@ zshc() {
   case "$1" in
   "d") pwd ;;
   *)
-    nvim
+    env "${DOTS_PREFIX[@]}" nvim
     # The file $ZSH_STALE_PATH is created via a Neovim autocmd.
     # See $XDG_CONFIG_HOME/nvim/lua/custom/autocmds/zsh.lua
     if [[ -f "$ZSH_STALE_PATH" ]]; then

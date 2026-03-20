@@ -1,3 +1,8 @@
+export BROWSER=firefox
+export EDITOR=nvim
+export PAGER=less
+export VISUAL=nvim
+
 export REPOS="$XDG_DATA_HOME/repos"
 
 export CARGO_HOME="$XDG_DATA_HOME/cargo"

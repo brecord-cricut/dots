@@ -3,7 +3,7 @@ hyprc() {
   case "$1" in
   "d") pwd ;;
   *)
-    nvim
+    env "${DOTS_PREFIX[@]}" nvim
     cd - >/dev/null
     ;;
   esac
