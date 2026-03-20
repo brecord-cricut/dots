@@ -1,1 +1,1 @@
-path=($HOME/.local/bin $path)
+[[ -d $HOME/.local/bin ]] && path=($HOME/.local/bin $path)

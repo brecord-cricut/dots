@@ -6,7 +6,4 @@ if [[ $OSTYPE == darwin* ]]; then
       eval "$(/usr/local/bin/brew shellenv)"
     fi
   fi
-
-  # Run path_helper to ensure proper PATH ordering
-  [[ -x /usr/libexec/path_helper ]] && eval "$(/usr/libexec/path_helper -s)"
 fi

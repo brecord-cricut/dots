@@ -1,5 +1,8 @@
-alias dflg="lazygit --git-dir=$REPOS/dots --work-tree=$HOME"
-alias dots="git --git-dir=$REPOS/dots --work-tree=$HOME"
+DOTS_PREFIX=(GIT_DIR=$REPOS/dots GIT_WORK_TREE=$HOME)
+
+dflg() { env "${DOTS_PREFIX[@]}" lazygit "$@"; }
+dots() { env "${DOTS_PREFIX[@]}" git "$@"; }
+
 alias ld="lazydocker"
 alias lg="lazygit"
 alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
