@@ -13,7 +13,6 @@ export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --border=sharp --no-scrol
 export GNUPGHOME="$XDG_CONFIG_HOME/gnupg"
 export GOMODCACHE="$XDG_CACHE_HOME/go/mod"
 export GOPATH="$XDG_DATA_HOME/go"
-export LESS="-iMRx4 -j.5"
 export MANPAGER="nvim +Man!"
 export PASSWORD_STORE_DIR="$REPOS/password-store"
 export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
