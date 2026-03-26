@@ -9,7 +9,6 @@ export CARGO_HOME="$XDG_DATA_HOME/cargo"
 export CMAKE_INSTALL_PREFIX="$HOME/.local"
 export CUDA_CACHE_PATH="$XDG_CACHE_HOME/nv"
 export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
-export DOTS_PREFIX=(GIT_DIR=$REPOS/dots GIT_WORK_TREE=$HOME)
 export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --border=sharp --no-scrollbar"
 export GNUPGHOME="$XDG_CONFIG_HOME/gnupg"
 export GOMODCACHE="$XDG_CACHE_HOME/go/mod"
