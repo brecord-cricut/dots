@@ -31,10 +31,10 @@ if [ ! -r "$wallpaper" ]; then
 fi
 
 # Start wallpaper daemon, if not running
-pidof swww-daemon &>/dev/null || swww-daemon &
+pidof awww-daemon &>/dev/null || awww-daemon &
 
 # Apply wallpaper
-swww img "$wallpaper" \
+awww img "$wallpaper" \
   --transition-fps 120 \
   --transition-type fade \
   --transition-duration 1.6
