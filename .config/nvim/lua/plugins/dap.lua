@@ -87,6 +87,28 @@ return {
       local dap = require("dap")
       local dapui = require("dapui")
 
+      -- Exception breakpoint toggle state
+      local exception_bp_enabled = false
+
+      local function toggle_exception_breakpoints()
+        if not dap.session() then
+          vim.notify("No active debug session", vim.log.levels.WARN)
+          return
+        end
+
+        exception_bp_enabled = not exception_bp_enabled
+
+        if exception_bp_enabled then
+          -- Enable: use adapter default exception breakpoints
+          dap.set_exception_breakpoints("default")
+          vim.notify("🔴 Exception breakpoints ON", vim.log.levels.INFO)
+        else
+          -- Disable: don't break on any exceptions
+          dap.set_exception_breakpoints({})
+          vim.notify("⚪ Exception breakpoints OFF", vim.log.levels.INFO)
+        end
+      end
+
       -- Keymaps
       local map = vim.keymap.set
 
@@ -122,6 +144,10 @@ return {
       -- UI
       map("n", "<leader>du", function() dapui.toggle({}) end, { desc = "Toggle DAP UI" })
       map({ "n", "v" }, "<leader>de", dapui.eval, { desc = "Eval" })
+
+      -- Exception breakpoints
+      map("n", "<leader>dx", toggle_exception_breakpoints, { desc = "Toggle Exception Breakpoints" })
+      map("n", "<leader>ux", toggle_exception_breakpoints, { desc = "Toggle Exception Breakpoints" })
 
       -- Widgets
       map("n", "<leader>dw", function() require("dap.ui.widgets").hover() end, { desc = "Widgets" })

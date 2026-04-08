@@ -2,6 +2,7 @@ return {
   "nvim-neotest/neotest",
   dependencies = {
     "alfaix/neotest-gtest",
+    "sidlatau/neotest-dart",
     "xieyonn/spinner.nvim",
   },
   opts = function()
@@ -11,8 +12,13 @@ return {
 
     return {
       adapters = {
+        ["neotest-dart"] = {
+          command = "flutter",
+          use_lsp = true,
+        },
         ["neotest-gtest"] = {},
       },
+      default_strategy = "dap",
       -- Icons for test statuses and UI elements
       icons = {
         -- Status icons
