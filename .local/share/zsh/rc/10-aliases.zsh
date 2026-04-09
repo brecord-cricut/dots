@@ -62,6 +62,10 @@ elif ((${+commands[ncpus]})); then # macOS
   alias make='make -j$(( $(ncpus) + 1 ))'
 fi
 
+if [[ $OSTYPE == linux* ]] && ((${+commands[xdg-open]})); then
+  alias open='xdg-open'
+fi
+
 # Quick navigation
 alias ..='cd ..'
 alias ...='cd ../..'
