@@ -9,8 +9,11 @@ current_time=$(date +%s)
 
 # Check if timestamp file exists and if less than 24 hours have passed
 if [[ ! -f "$timestamp_file" ]] || [[ $((current_time - $(cat "$timestamp_file"))) -gt 86400 ]]; then
-  # Run pass git pull in background, suppress normal output, log errors only
-  pass git pull >/dev/null 2>>/tmp/ERROR_pass_pull.log &
+  # Check if git has a remote before pulling
+  if pass git remote >/dev/null 2>&1; then
+    # Run pass git pull in background, suppress normal output, log errors only
+    pass git pull >/dev/null 2>>/tmp/ERROR_pass_pull.log &
+  fi
 
   # Update timestamp file with current time
   echo "$current_time" >"$timestamp_file"
