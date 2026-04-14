@@ -5,6 +5,7 @@ return {
     servers = {
       bashls = { filetypes = { "sh", "zsh" } },
       hyprls = vim.uv.os_uname().sysname == "Linux" and {},
+      sourcekit = {},
     },
   },
   keys = {
