@@ -88,7 +88,7 @@ return {
       local dapui = require("dapui")
 
       -- Exception breakpoint toggle state
-      local exception_bp_enabled = false
+      local break_on_exception = true
 
       local function toggle_exception_breakpoints()
         if not dap.session() then
@@ -96,29 +96,30 @@ return {
           return
         end
 
-        exception_bp_enabled = not exception_bp_enabled
+        break_on_exception = not break_on_exception
 
-        if exception_bp_enabled then
+        if break_on_exception then
           -- Enable: use adapter default exception breakpoints
           dap.set_exception_breakpoints("default")
-          vim.notify("🔴 Exception breakpoints ON", vim.log.levels.INFO)
+          vim.notify("🔴 Break on exceptions ON", vim.log.levels.INFO)
         else
           -- Disable: don't break on any exceptions
           dap.set_exception_breakpoints({})
-          vim.notify("⚪ Exception breakpoints OFF", vim.log.levels.INFO)
+          vim.notify("⚪ Break on exceptions OFF", vim.log.levels.INFO)
         end
       end
 
-      -- Keymaps
-      local map = vim.keymap.set
-
       -- Breakpoints
-      map("n", "<leader>db", dap.toggle_breakpoint, { desc = "Toggle Breakpoint" })
-      map("n", "<leader>dB", function() dap.set_breakpoint(vim.fn.input("Breakpoint condition: ")) end, { desc = "Conditional Breakpoint" })
-      map("n", "<leader>dl", function() dap.set_breakpoint(nil, nil, vim.fn.input("Log point message: ")) end, { desc = "Log Point" })
+      vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "Toggle Breakpoint" })
+      vim.keymap.set("n", "<leader>dB", function()
+        dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
+      end, { desc = "Conditional Breakpoint" })
+      vim.keymap.set("n", "<leader>dl", function()
+        dap.set_breakpoint(nil, nil, vim.fn.input("Log point message: "))
+      end, { desc = "Log Point" })
 
       -- Execution
-      map("n", "<leader>dc", function()
+      vim.keymap.set("n", "<leader>dc", function()
         if dap.session() then
           dap.continue()
         elseif vim.bo.filetype == "dart" then
@@ -127,30 +128,34 @@ return {
           dap.continue()
         end
       end, { desc = "Continue" })
-      map("n", "<leader>dC", dap.run_to_cursor, { desc = "Run to Cursor" })
-      map("n", "<leader>di", dap.step_into, { desc = "Step Into" })
-      map("n", "<leader>do", dap.step_over, { desc = "Step Over" })
-      map("n", "<leader>dO", dap.step_out, { desc = "Step Out" })
-      map("n", "<leader>dj", dap.down, { desc = "Down" })
-      map("n", "<leader>dk", dap.up, { desc = "Up" })
-      map("n", "<leader>dp", dap.pause, { desc = "Pause" })
+      vim.keymap.set("n", "<leader>dC", dap.run_to_cursor, { desc = "Run to Cursor" })
+      vim.keymap.set("n", "<leader>di", dap.step_into, { desc = "Step Into" })
+      vim.keymap.set("n", "<leader>do", dap.step_over, { desc = "Step Over" })
+      vim.keymap.set("n", "<leader>dO", dap.step_out, { desc = "Step Out" })
+      vim.keymap.set("n", "<leader>dj", dap.down, { desc = "Down" })
+      vim.keymap.set("n", "<leader>dk", dap.up, { desc = "Up" })
+      vim.keymap.set("n", "<leader>dp", dap.pause, { desc = "Pause" })
 
       -- Session
-      map("n", "<leader>dr", dap.repl.toggle, { desc = "Toggle REPL" })
-      map("n", "<leader>ds", dap.session, { desc = "Session" })
-      map("n", "<leader>dt", dap.terminate, { desc = "Terminate" })
-      map("n", "<leader>dR", dap.restart, { desc = "Restart" })
+      vim.keymap.set("n", "<leader>dr", dap.repl.toggle, { desc = "Toggle REPL" })
+      vim.keymap.set("n", "<leader>ds", dap.session, { desc = "Session" })
+      vim.keymap.set("n", "<leader>dt", dap.terminate, { desc = "Terminate" })
+      vim.keymap.set("n", "<leader>dR", dap.restart, { desc = "Restart" })
 
       -- UI
-      map("n", "<leader>du", function() dapui.toggle({}) end, { desc = "Toggle DAP UI" })
-      map({ "n", "v" }, "<leader>de", dapui.eval, { desc = "Eval" })
+      vim.keymap.set("n", "<leader>du", function()
+        dapui.toggle({})
+      end, { desc = "Toggle DAP UI" })
+      vim.keymap.set({ "n", "v" }, "<leader>de", dapui.eval, { desc = "Eval" })
 
       -- Exception breakpoints
-      map("n", "<leader>dx", toggle_exception_breakpoints, { desc = "Toggle Exception Breakpoints" })
-      map("n", "<leader>ux", toggle_exception_breakpoints, { desc = "Toggle Exception Breakpoints" })
+      vim.keymap.set("n", "<leader>dx", toggle_exception_breakpoints, { desc = "Toggle Exception Breakpoints" })
+      vim.keymap.set("n", "<leader>ux", toggle_exception_breakpoints, { desc = "Toggle Exception Breakpoints" })
 
       -- Widgets
-      map("n", "<leader>dw", function() require("dap.ui.widgets").hover() end, { desc = "Widgets" })
+      vim.keymap.set("n", "<leader>dw", function()
+        require("dap.ui.widgets").hover()
+      end, { desc = "Widgets" })
 
       -- Signs
       vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DiagnosticError", linehl = "", numhl = "" })
