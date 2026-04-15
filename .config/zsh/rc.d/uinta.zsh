@@ -12,6 +12,7 @@ uinta() {
   case "$cmd" in
   b) cmd=build ;;
   d) cmd=dir ;;
+  pm) cmd=project-management ;;
   r) cmd=repo ;;
   t) cmd=test ;;
   esac
@@ -33,9 +34,16 @@ uinta() {
     return
     ;;
 
+  project-management)
+    cd "$NEXTCLOUD_DIR/documents/uinta-project-management"
+    echo "→ $(pwd)"
+    nvim -c "lua require('persistence').load()"
+    ;;
+
   repo)
     cd "$REPOS/uinta"
     echo "→ $(pwd)"
+    lazygit
     return
     ;;
 
@@ -50,9 +58,9 @@ uinta() {
     fi
 
     local -a test_bins
-    test_bins=( "$build_dir"/src/*/test/*_test(N) )
+    test_bins=("$build_dir"/src/*/test/*_test(N))
 
-    if (( ${#test_bins[@]} == 0 )); then
+    if ((${#test_bins[@]} == 0)); then
       echo "No test executables found in build directory"
       return 1
     fi
@@ -60,7 +68,7 @@ uinta() {
     local failed=0
     for test_bin in "${test_bins[@]}"; do
       echo "\n→ Running $(basename "$test_bin")..."
-      if (( $# > 0 )); then
+      if (($# > 0)); then
         "$test_bin" --gtest_filter="*$1*" || failed=1
       else
         "$test_bin" || failed=1
@@ -103,9 +111,9 @@ _uinta() {
       local -a tests
       local test_bin
       for test_bin in "$UINTA_HOME/build"/src/*/test/*_test(N); do
-        tests+=( ${(f)"$("$test_bin" --gtest_list_tests 2>/dev/null | grep -E '^\w+\.' | sed 's/\.$//')"} )
+        tests+=(${(f)"$("$test_bin" --gtest_list_tests 2>/dev/null | grep -E '^\w+\.' | sed 's/\.$//')"})
       done
-      if (( ${#tests[@]} > 0 )); then
+      if ((${#tests[@]} > 0)); then
         _describe "test suites" tests
       fi
     fi
