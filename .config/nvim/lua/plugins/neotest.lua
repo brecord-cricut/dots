@@ -16,7 +16,9 @@ return {
           command = "flutter",
           use_lsp = true,
         },
-        ["neotest-gtest"] = {},
+        ["neotest-gtest"] = {
+          use_lsp = true,
+        },
       },
       default_strategy = "dap",
       -- Icons for test statuses and UI elements
