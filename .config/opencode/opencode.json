@@ -1,6 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "model": "{env:OPENCODE_MODEL}",
+  "autoupdate": false,
   "provider": {
     "anthropic": {
       "models": {},
@@ -12,7 +12,14 @@
   "permission": {
     "bash": {
       "*": "allow",
-      "rm -rf *": "deny"
+      "rm -rf *": "deny",
+      "sudo *": "ask"
+    },
+    "edit": {
+      "~/.local/share/Nextcloud/documents/uinta-project-management/**": "ask"
+    },
+    "external_directory": {
+      "~/.local/share/Nextcloud/documents/uinta-project-management/**": "allow"
     }
   }
 }
