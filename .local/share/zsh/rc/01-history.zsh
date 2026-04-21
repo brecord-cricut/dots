@@ -20,7 +20,7 @@ HISTORY_IGNORE_COMMANDS=(
   date uptime
   exit clear
   lazydocker lazygit
-  ls ll la l la lg
+  ls ll la l la lg dflg
   scratch tmp
   top btop htop
   make
