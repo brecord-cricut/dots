@@ -1,0 +1,4 @@
+[submodule "powerlevel10k"]
+	path = .local/share/zsh/plugins/powerlevel10k
+	url = https://github.com/romkatv/powerlevel10k.git
+	branch = v1.20.0

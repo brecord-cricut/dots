@@ -9,5 +9,6 @@ git clone --bare git@github.com:Benjman/dots.git $XDG_DATA_HOME/repos/dots
 alias dots="git --git-dir=$XDG_DATA_HOME/repos/dots --work-tree=$HOME"
 dots checkout
 dots config --local status.showUntrackedFiles false
+dots submodule update --init
 exec zsh
 ```
