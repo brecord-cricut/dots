@@ -10,6 +10,11 @@ local -a plugins=(
   https://github.com/Aloxaf/fzf-tab
 )
 
+# Plugins that must be sourced after compinit
+local -a deferred_plugins=(
+  fzf-tab
+)
+
 local repo
 
 if [[ ! -f "$plugin_lock" ]]; then
@@ -31,8 +36,9 @@ fi
 for repo in "${plugins[@]}"; do
   local name=${repo##*/}
   local dir="$plugin_home/$name"
+  [[ "${deferred_plugins[(Ie)$name]}" -gt 0 ]] && continue
   [[ -f "$dir/${name:t}.zsh" ]] && source "$dir/${name:t}.zsh"
   [[ -f "$dir/${name:t}.plugin.zsh" ]] && source "$dir/${name:t}.plugin.zsh"
 done
 
-unset -v dir plugin_home plugin_lock plugins repo
+unset -v dir plugin_home plugin_lock plugins repo deferred_plugins

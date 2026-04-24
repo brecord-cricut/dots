@@ -1,19 +1,15 @@
 autoload -Uz compinit
 
-# Regenerate zcompdump only if it's older than 1 day OR missing
+# Regenerate zcompdump only if it's older than 24 hours or missing
 zcompdump="${ZSH_CACHE}/zcompdump"
-if [[ ! -f "$zcompdump"(N) || $zcompdump -nt $zcompdump.zwc(#qN) || \
-  ${#${(f)"$(find "$ZSH_CACHE" -name 'zcompdump*' -mtime +1 2>/dev/null || true)"}} -gt 0 ]]; then
-    compinit -d "$zcompdump"
-    # Compile the dump into .zwc for ~30–50 % faster loading next time
-    zcompile "$zcompdump" 2>/dev/null
-  else
-    # Skip checking all the completion files (huge speedup on large $fpath)
-    compinit -C -d "$zcompdump"
+if [[ -n ${zcompdump}(#qN.mh+24) ]]; then
+  compinit -d "$zcompdump"
+  # Compile the dump into .zwc for faster loading next time
+  zcompile "$zcompdump" 2>/dev/null
+else
+  # Skip compaudit — huge speedup on every shell start
+  compinit -C -d "$zcompdump"
 fi
-
-# If the compiled version exists and is newer, load that instead
-[[ -r "${zcompdump}.zwc" && ${zcompdump}.zwc -nt ${zcompdump} ]] && compinit -i -d "$zcompdump"
 
 zstyle ':completion:*' menu select                     # arrow-key driven menu
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}" # colored completion lists
