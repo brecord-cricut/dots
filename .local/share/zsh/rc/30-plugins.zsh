@@ -30,7 +30,7 @@ if [[ ! -f "$plugin_lock" ]]; then
     _clone "$repo"
   done
 
-  touch "$plugin_lock"
+  mkdir -p $ZSH_CACHE 2> /dev/null ; touch "$plugin_lock"
 fi
 
 for repo in "${plugins[@]}"; do
