@@ -35,9 +35,9 @@ uinta() {
     ;;
 
   project-management)
-    cd "$NEXTCLOUD_DIR/documents/uinta-project-management"
-    echo "→ $(pwd)"
+    cd "$NEXTCLOUD_DIR/documents/uinta-project-management" || return 1
     nvim -c "lua require('persistence').load()"
+    cd - >/dev/null
     ;;
 
   repo)
@@ -56,6 +56,9 @@ uinta() {
       echo "Build directory not found. Run: cmake -B build . && make -j\$(nproc) --directory build"
       return 1
     fi
+
+    echo "→ Building..."
+    make -j$(nproc) --directory build || return 1
 
     echo "→ Running tests with ctest..."
     if (($# > 0)); then
@@ -87,6 +90,7 @@ _uinta() {
     local -a commands=(
       "b:build the project"
       "d:go to source directory"
+      "pm:project management"
       "r:go to repos directory"
       "t:run tests"
     )
