@@ -57,26 +57,15 @@ uinta() {
       return 1
     fi
 
-    local -a test_bins
-    test_bins=("$build_dir"/src/*/test/*_test(N))
-
-    if ((${#test_bins[@]} == 0)); then
-      echo "No test executables found in build directory"
-      return 1
+    echo "→ Running tests with ctest..."
+    if (($# > 0)); then
+      ctest --test-dir "$build_dir" -R "$1" --output-on-failure --stop-on-failure
+    else
+      ctest --test-dir "$build_dir" --output-on-failure --stop-on-failure
     fi
 
-    local failed=0
-    for test_bin in "${test_bins[@]}"; do
-      echo "\n→ Running $(basename "$test_bin")..."
-      if (($# > 0)); then
-        "$test_bin" --gtest_filter="*$1*" || failed=1
-      else
-        "$test_bin" || failed=1
-      fi
-    done
-
     cd - >/dev/null
-    return $failed
+    return $?
     ;;
 
   "")
