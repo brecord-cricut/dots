@@ -17,7 +17,7 @@ zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:
 zstyle ':completion:*' completer _expand _complete _correct _approximate
 zstyle ':completion:*' expand prefix suffix
 zstyle ':completion:*' squeeze-slashes true            # cd /u/lo/b<tab> → /usr/local/bin
-zstyle ':completion:*' special-dirs true               # allow .. as completion
+zstyle ':completion:*' special-dirs false              # don't show . or .. in completion
 zstyle ':completion:*:descriptions' format '%F{yellow}-- %d --%f'
 zstyle ':completion:*:corrections' format '%F{magenta}-- %d (errors: %e) --%f'
 zstyle ':completion:*:warnings' format '%F{red}-- no matches --%f'
