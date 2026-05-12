@@ -38,7 +38,10 @@ local git_hub_override = {
     if is_git_tracked then
       local remote_url = resolve_remote_url(vim.uv.cwd())
       if remote_url then
-        local org, repo = remote_url:match("github.com[/:](.-)/(.+)%.git")
+        local org, repo = remote_url:match("github.com[/:]([^/]+)/([^/]+)")
+        if repo then
+          repo = repo:gsub("%.git$", "")
+        end
         if org and repo then
           return "https://github.com/" .. org .. "/" .. repo .. "/pull/" .. pr_num
         end
