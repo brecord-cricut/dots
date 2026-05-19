@@ -30,6 +30,18 @@ symlink_config_dir() {
   fi
 }
 
+open() {
+  if [[ $# -eq 1 && -f "$1" ]]; then
+    local mime
+    mime=$(file --mime-type -b "$1" 2>/dev/null)
+    if [[ "$mime" == text/* ]]; then
+      $EDITOR "$1"
+      return
+    fi
+  fi
+  command open "$@"
+}
+
 symlink_config_dir lazygit
 symlink_config_dir qutebrowser
 unset -f symlink_config_dir
