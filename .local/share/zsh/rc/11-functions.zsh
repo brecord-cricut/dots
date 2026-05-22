@@ -25,7 +25,7 @@ tmp() {
 }
 
 scratch() {
-  tmp
-  $EDITOR ${1:-scratch}.md
-  cd - >/dev/null
+  local file=$(mktemp "$XDG_RUNTIME_DIR/zsh.XXXXXX")
+  echo "→ $file"
+  $EDITOR "$file"
 }
