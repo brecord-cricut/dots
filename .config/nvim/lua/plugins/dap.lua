@@ -146,6 +146,9 @@ return {
       vim.keymap.set("n", "<leader>du", function()
         dapui.toggle({})
       end, { desc = "Toggle DAP UI" })
+      vim.keymap.set("n", "<leader>dU", function()
+        dapui.open({ reset = true })
+      end, { desc = "Reset DAP UI" })
       vim.keymap.set({ "n", "v" }, "<leader>de", dapui.eval, { desc = "Eval" })
 
       -- Exception breakpoints
