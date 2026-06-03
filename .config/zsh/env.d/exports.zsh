@@ -6,6 +6,7 @@ export VISUAL=nvim
 export REPOS="$XDG_DATA_HOME/repos"
 
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
+export CMAKE_EXPORT_COMPILE_COMMANDS=1
 export CMAKE_INSTALL_PREFIX="$HOME/.local"
 export CUDA_CACHE_PATH="$XDG_CACHE_HOME/nv"
 export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
