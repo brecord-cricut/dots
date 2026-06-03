@@ -1,6 +1,5 @@
 return {
   priority = 100,
-  { "catppuccin/nvim", event = "VeryLazy" },
   { "EdenEast/nightfox.nvim", event = "VeryLazy" },
   { "folke/tokyonight.nvim", event = "VeryLazy" },
   { "navarasu/onedark.nvim", event = "VeryLazy" },
