@@ -9,7 +9,7 @@ notes() {
   local notes_path="$NEXTCLOUD_DIR/Notes"
   if [ -d "$notes_path" ]; then
     cd "$notes_path"
-    GIT_DIR= $EDITOR
+    GIT_DIR= NOTES=1 $EDITOR
     cd - >/dev/null
   else
     echo "Notes directory not found: $notes_path"
