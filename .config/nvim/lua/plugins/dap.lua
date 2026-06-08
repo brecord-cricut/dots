@@ -5,22 +5,51 @@ return {
     dependencies = {
       -- UI
       {
+        "igorlfs/nvim-dap-view",
+        opts = {
+          winbar = {
+            sections = { "watches", "scopes", "exceptions", "breakpoints", "threads", "console", "repl" },
+            default_section = "repl",
+          },
+          auto_toggle = "open_term",
+        },
+        keys = {
+          {
+            "<leader>d3",
+            function()
+              require("dap-view").hover()
+            end,
+            desc = "Dap View Hover",
+          },
+          {
+            "<leader>du",
+            function()
+              require("dap-view").toggle()
+            end,
+            desc = "Toggle DAP view",
+          },
+          {
+            "<leader>dw",
+            function()
+              require("dap-view").watch()
+            end,
+            desc = "DAP View Watch",
+          },
+        },
+      },
+      {
         "rcarriga/nvim-dap-ui",
+        cond = false,
         dependencies = { "nvim-neotest/nvim-nio" },
         opts = {},
         config = function(_, opts)
           local dap = require("dap")
           local dapui = require("dapui")
           dapui.setup(opts)
-          dap.listeners.after.event_initialized["dapui_config"] = function()
-            dapui.open({})
-          end
-          dap.listeners.before.event_terminated["dapui_config"] = function()
-            dapui.close({})
-          end
-          dap.listeners.before.event_exited["dapui_config"] = function()
-            dapui.close({})
-          end
+          dap.listeners.before.attach.dapui_config = dapui.open
+          dap.listeners.before.launch.dapui_config = dapui.open
+          dap.listeners.before.event_terminated.dapui_config = dapui.close
+          dap.listeners.before.event_exited.dapui_config = dapui.close
 
           -- Auto-reset DAP UI on Neovim resize (for tiling WMs)
           local resize_timer = nil
@@ -85,7 +114,7 @@ return {
 
     config = function()
       local dap = require("dap")
-      local dapui = require("dapui")
+      -- local dapui = require("dapui")
 
       -- Exception breakpoint toggle state
       local break_on_exception = true
@@ -142,23 +171,23 @@ return {
       vim.keymap.set("n", "<leader>dt", dap.terminate, { desc = "Terminate" })
       vim.keymap.set("n", "<leader>dR", dap.restart, { desc = "Restart" })
 
-      -- UI
-      vim.keymap.set("n", "<leader>du", function()
-        dapui.toggle({})
-      end, { desc = "Toggle DAP UI" })
-      vim.keymap.set("n", "<leader>dU", function()
-        dapui.open({ reset = true })
-      end, { desc = "Reset DAP UI" })
-      vim.keymap.set({ "n", "v" }, "<leader>de", dapui.eval, { desc = "Eval" })
+      -- -- UI
+      -- vim.keymap.set("n", "<leader>du", function()
+      --   dapui.toggle({})
+      -- end, { desc = "Toggle DAP UI" })
+      -- vim.keymap.set("n", "<leader>dU", function()
+      --   dapui.open({ reset = true })
+      -- end, { desc = "Reset DAP UI" })
+      -- vim.keymap.set({ "n", "v" }, "<leader>de", dapui.eval, { desc = "Eval" })
 
       -- Exception breakpoints
       vim.keymap.set("n", "<leader>dx", toggle_exception_breakpoints, { desc = "Toggle Exception Breakpoints" })
       vim.keymap.set("n", "<leader>ux", toggle_exception_breakpoints, { desc = "Toggle Exception Breakpoints" })
 
-      -- Widgets
-      vim.keymap.set("n", "<leader>dw", function()
-        require("dap.ui.widgets").hover()
-      end, { desc = "Widgets" })
+      -- -- Widgets
+      -- vim.keymap.set("n", "<leader>dw", function()
+      --   require("dap.ui.widgets").hover()
+      -- end, { desc = "Widgets" })
 
       -- Signs
       vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DiagnosticError", linehl = "", numhl = "" })
