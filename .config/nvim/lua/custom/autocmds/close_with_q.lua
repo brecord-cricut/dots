@@ -32,7 +32,11 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.api.nvim_create_autocmd("FileType", {
   group = augroup("close_with_q"),
   pattern = {
-    "dap-float",
+    "dap-repl",
+    "dap-view",
+    "dap-view-help",
+    "dap-view-hover",
+    "dap-view-term",
     "log",
   },
   callback = function(event)
