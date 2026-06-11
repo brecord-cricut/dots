@@ -5,7 +5,7 @@ repos() {
 
 if command -v compdef &> /dev/null; then
   _reposCompletion() {
-    compadd -- ${(f)"$(ls -1d $REPOS/*(/) 2>/dev/null | xargs -n1 basename)"}
+    _files -W "$REPOS" -/
   }
   compdef _reposCompletion repos
 fi
