@@ -24,3 +24,6 @@
 
 [include]
   path = ~/.local/state/git/config
+
+[includeIf "gitdir:~/.local/share/repos/dots/.git"]
+  path = ~/.config/git/dots.config

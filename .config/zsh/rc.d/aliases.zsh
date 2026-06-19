@@ -1,4 +1,4 @@
-DOTS_PREFIX=(GIT_DIR=$REPOS/dots GIT_WORK_TREE=$HOME)
+DOTS_PREFIX=(GIT_DIR=$REPOS/dots/.git GIT_WORK_TREE=$HOME)
 
 if command -v lazygit >/dev/null; then
   lazygit() {

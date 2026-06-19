@@ -2,7 +2,7 @@ return {
   "Benjman/lvdflg.nvim",
   cond = vim.env.REPOS ~= nil,
   opts = function()
-    local path = vim.env.REPOS .. "/dots"
+    local path = vim.env.REPOS .. "/dots/.git"
     return vim.fn.isdirectory(path) == 1 and {
       git_dir = path,
     }
