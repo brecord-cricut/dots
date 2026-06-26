@@ -89,6 +89,24 @@ return {
           settings = {
             enableSnippets = false,
           },
+          on_attach = function(client, bufnr)
+            -- Prevent LSP from indexing Flutter/Dart SDK sources navigated to
+            -- during debugging (e.g. when "break on exception" lands in framework
+            -- code), which causes a heavy re-indexing of the entire SDK workspace.
+            local fname = vim.api.nvim_buf_get_name(bufnr)
+            local sdk_patterns = {
+              "/flutter/packages/",
+              "/flutter/bin/cache/dart%-sdk/",
+              "/%.pub%-cache/", -- TEST
+              "/dart%-sdk/lib/",
+            }
+            for _, pattern in ipairs(sdk_patterns) do
+              if fname:find(pattern) then
+                vim.lsp.buf_detach_client(bufnr, client.id)
+                return
+              end
+            end
+          end,
         },
         root_patterns = { ".git" },
         dev_log = {
