@@ -7,4 +7,13 @@ return {
       virt_text_pos = "right_align",
     },
   },
+  keys = {
+    {
+      "<leader>uB",
+      function()
+        require("gitsigns").toggle_current_line_blame()
+      end,
+      desc = "Toggle Current Line Blame",
+    },
+  },
 }
