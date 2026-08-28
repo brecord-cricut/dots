@@ -4,6 +4,13 @@
 
 [ "$(uname)" = "Darwin" ] || exit 0
 
+# `defaults` always targets the logged-in account's real preference database,
+# regardless of $HOME — so skip entirely when $HOME isn't the account's real
+# home dir (e.g. a scratch $HOME used to test the git hooks), otherwise this
+# would silently overwrite the real machine's Hammerspoon preference.
+real_home=$(eval echo "~$(id -un)" 2>/dev/null)
+[ "$HOME" = "$real_home" ] || exit 0
+
 desired="$XDG_CONFIG_HOME/hammerspoon/init.lua"
 current=$(defaults read org.hammerspoon.Hammerspoon MJConfigFile 2>/dev/null)
 
