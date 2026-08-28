@@ -16,7 +16,7 @@ if command -v start-hyprland >/dev/null; then
       echo ":: Failed to locate suitable wallpaper. This will cause Hyprland to error!"
       return 1
     fi
-    sh "$XDG_CONFIG_HOME/hypr/scripts/wallpaper.sh $wallpaper"
+    sh "$XDG_CONFIG_HOME/hypr/scripts/wallpaper.sh" "$wallpaper"
   fi
 
   if [[ "$(tty)" == "/dev/tty1" ]]; then
