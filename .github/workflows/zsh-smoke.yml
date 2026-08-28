@@ -1,0 +1,69 @@
+name: Zsh Boot Smoke Test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  boot:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install zsh
+        run: |
+          if ! command -v zsh >/dev/null; then
+            if [ "$RUNNER_OS" = "Linux" ]; then
+              sudo apt-get update && sudo apt-get install -y zsh
+            else
+              brew install zsh
+            fi
+          fi
+
+      - name: Run post-checkout bootstrap against a scratch $HOME
+        # Checked out repo IS the scratch $HOME: every path in this repo
+        # (.config, .local, .zshenv) is written relative to $HOME.
+        # env -i so a pre-exported XDG_CACHE_HOME etc. on the runner can't
+        # mask a broken default in the script (its `:=` only fires if unset).
+        run: env -i HOME="$GITHUB_WORKSPACE" PATH=/usr/bin:/bin sh .config/git/dots-hooks/post-checkout.d/10-bootstrap.sh
+
+      - name: Boot zsh non-interactively-forced-interactive
+        # .zshrc bails immediately unless the shell is interactive, so `-i` is
+        # required even though there's no tty; `-l` picks up .zprofile too.
+        # env -i strips the runner's own environment so nothing set by an
+        # unrelated preinstalled shell config leaks into this test.
+        run: |
+          env -i HOME="$GITHUB_WORKSPACE" PATH=/usr/bin:/bin:/usr/local/bin \
+            TERM=xterm-256color GIT_AUTHOR_NAME=ci GIT_AUTHOR_EMAIL=ci@example.com \
+            zsh -li -c 'echo ZSH_BOOT_OK; exit 0'
+
+      # These two steps source rc.d/aliases.zsh directly (not a full -li boot)
+      # so the result only depends on PATH, not on whatever the runner's real
+      # package manager (e.g. Homebrew on macos-latest) happens to have
+      # pre-installed — a full boot would re-inject the runner's real
+      # /opt/homebrew/bin via env/10_homebrew.zsh and mask a broken guard.
+      - name: Guarded aliases ARE defined when their tool is on PATH
+        run: |
+          shim_dir="$RUNNER_TEMP/shims"
+          mkdir -p "$shim_dir"
+          for tool in lazydocker tmux wget claude lazygit; do
+            printf '#!/bin/sh\ntrue\n' >"$shim_dir/$tool"
+            chmod +x "$shim_dir/$tool"
+          done
+          env -i HOME="$GITHUB_WORKSPACE" PATH="$shim_dir:/usr/bin:/bin" \
+            ZDOTDIR="$GITHUB_WORKSPACE/.config/zsh" \
+            zsh -c 'source .config/zsh/rc.d/aliases.zsh
+              alias ld >/dev/null && alias cl >/dev/null && alias tmux >/dev/null && alias wget >/dev/null && echo ALIASES_DEFINED_OK'
+
+      - name: Guarded aliases are ABSENT when their tool is missing
+        run: |
+          out=$(env -i HOME="$GITHUB_WORKSPACE" PATH=/usr/bin:/bin \
+            ZDOTDIR="$GITHUB_WORKSPACE/.config/zsh" \
+            zsh -c 'source .config/zsh/rc.d/aliases.zsh
+              (alias ld || alias cl || alias tmux || alias wget) >/dev/null 2>&1 && echo UNEXPECTED_ALIAS || echo ALIASES_ABSENT_OK')
+          echo "$out"
+          [ "$out" = "ALIASES_ABSENT_OK" ]
