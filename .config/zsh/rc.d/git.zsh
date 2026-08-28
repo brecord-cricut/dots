@@ -1,9 +1,10 @@
 if [[ -z "$GIT_AUTHOR_NAME" || -z "$GIT_AUTHOR_EMAIL" ]]; then
+  local git_name git_email
   printf "git user context is missing.\n"
   printf "Enter your Git author name: "
-  read git_name
+  read -r git_name
   printf "Enter your Git author email: "
-  read git_email
+  read -r git_email
   if [[ -z "$git_name" || -z "$git_email" ]]; then
     printf "Error: Both Git author name and email are required.\n"
     return 1
