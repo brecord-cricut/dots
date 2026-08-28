@@ -12,7 +12,7 @@ if [[ ! -f "$timestamp_file" ]] || [[ $((current_time - $(cat "$timestamp_file")
   # Check if git has a remote before pulling
   if pass git remote >/dev/null 2>&1; then
     # Run pass git pull in background, suppress normal output, log errors only
-    pass git pull >/dev/null 2>>/tmp/ERROR_pass_pull.log &
+    pass git pull >/dev/null 2>>"$ZSH_CACHE/pass_pull_error.log" &
   fi
 
   # Update timestamp file with current time
