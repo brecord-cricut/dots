@@ -1,0 +1,97 @@
+name: Git Hooks Self-Test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  hooks:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    env:
+      # Scratch $HOME standing in for a fresh machine. Everything below is
+      # scoped under $RUNNER_TEMP, never the runner's real $HOME.
+      SCRATCH_HOME: ${{ github.workspace }}-scratch-home
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: repo
+
+      - name: Bare-clone the checkout locally (no network dependency on the real remote)
+        # Mirrors the README's `git clone --bare .../dots.git $XDG_DATA_HOME/repos/dots/.git`,
+        # but clones from the local checkout instead of GitHub so this test
+        # exercises today's tree, not whatever main last looked like upstream.
+        run: |
+          mkdir -p "$SCRATCH_HOME/.local/share/repos/dots"
+          git clone --bare "$GITHUB_WORKSPACE/repo" "$SCRATCH_HOME/.local/share/repos/dots/.git"
+
+      - name: First checkout — hooksPath must NOT be active yet
+        # The includeIf in ~/.config/git/config can't match before this very
+        # checkout writes that file to disk, so no hooks should fire here.
+        run: |
+          dots() { env HOME="$SCRATCH_HOME" GIT_DIR="$SCRATCH_HOME/.local/share/repos/dots/.git" GIT_WORK_TREE="$SCRATCH_HOME" git "$@"; }
+          dots config --local status.showUntrackedFiles false
+          out=$(dots checkout 2>&1)
+          echo "$out"
+          if echo "$out" | grep -qi "post-checkout: initializing submodules"; then
+            echo "::error::bootstrap hook fired on the FIRST checkout — hooksPath activated too early"
+            exit 1
+          fi
+          hp=$(dots config --get core.hooksPath 2>/dev/null || true)
+          [ "$hp" = "~/.config/git/dots-hooks" ] || { echo "::error::hooksPath not visible after first checkout wrote ~/.config/git/config (got: $hp)"; exit 1; }
+
+      - name: Second checkout — bootstrap hook must fire and create XDG dirs
+        run: |
+          dots() { env HOME="$SCRATCH_HOME" GIT_DIR="$SCRATCH_HOME/.local/share/repos/dots/.git" GIT_WORK_TREE="$SCRATCH_HOME" git "$@"; }
+          out=$(dots checkout 2>&1)
+          echo "$out"
+          echo "$out" | grep -qi "post-checkout: initializing submodules" || { echo "::error::bootstrap hook did not fire on the second checkout"; exit 1; }
+          for d in .cache/zsh .local/state/zsh/env .local/state/zsh/rc .local/state/git .local/share/repos .local/share/wallpapers .config/npm; do
+            [ -d "$SCRATCH_HOME/$d" ] || { echo "::error::expected XDG dir missing after bootstrap: $d"; exit 1; }
+          done
+          [ -f "$SCRATCH_HOME/.local/state/zsh/plugins/powerlevel10k/README.md" ] || { echo "::error::submodule was not initialized by the bootstrap hook"; exit 1; }
+
+      - name: pre-commit — blocks a staged secret
+        run: |
+          dots() { env HOME="$SCRATCH_HOME" GIT_DIR="$SCRATCH_HOME/.local/share/repos/dots/.git" GIT_WORK_TREE="$SCRATCH_HOME" git "$@"; }
+          echo 'AKIAABCDEFGHIJKLMNOP' > "$SCRATCH_HOME/secret-probe.txt"
+          dots add secret-probe.txt
+          if dots -c user.name=ci -c user.email=ci@example.com commit -m "should be blocked" >/tmp/secret-commit.log 2>&1; then
+            echo "::error::commit with a staged secret was NOT blocked"
+            cat /tmp/secret-commit.log
+            exit 1
+          fi
+          cat /tmp/secret-commit.log
+          dots reset --hard HEAD
+          rm -f "$SCRATCH_HOME/secret-probe.txt"
+
+      - name: pre-commit — blocks and unstages a file under .local/state/
+        run: |
+          dots() { env HOME="$SCRATCH_HOME" GIT_DIR="$SCRATCH_HOME/.local/share/repos/dots/.git" GIT_WORK_TREE="$SCRATCH_HOME" git "$@"; }
+          mkdir -p "$SCRATCH_HOME/.local/state/probe"
+          echo x > "$SCRATCH_HOME/.local/state/probe/leaked.txt"
+          dots add -f .local/state/probe/leaked.txt
+          if dots -c user.name=ci -c user.email=ci@example.com commit -m "should be blocked" >/tmp/state-commit.log 2>&1; then
+            echo "::error::commit with a staged .local/state/ file was NOT blocked"
+            cat /tmp/state-commit.log
+            exit 1
+          fi
+          cat /tmp/state-commit.log
+          staged=$(dots diff --cached --name-only)
+          [ -z "$staged" ] || { echo "::error::file under .local/state/ was blocked but not unstaged: $staged"; exit 1; }
+          rm -rf "$SCRATCH_HOME/.local/state/probe"
+
+      - name: pre-commit — a normal commit still succeeds
+        run: |
+          dots() { env HOME="$SCRATCH_HOME" GIT_DIR="$SCRATCH_HOME/.local/share/repos/dots/.git" GIT_WORK_TREE="$SCRATCH_HOME" git "$@"; }
+          before=$(dots rev-parse HEAD)
+          echo "harmless" > "$SCRATCH_HOME/harmless-probe.txt"
+          dots add harmless-probe.txt
+          dots -c user.name=ci -c user.email=ci@example.com commit -m "harmless probe commit"
+          after=$(dots rev-parse HEAD)
+          [ "$before" != "$after" ] || { echo "::error::a legitimate commit did not advance HEAD"; exit 1; }
+          dots reset --hard "$before"
+          rm -f "$SCRATCH_HOME/harmless-probe.txt"
