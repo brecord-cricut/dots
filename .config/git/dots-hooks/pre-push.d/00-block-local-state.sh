@@ -1,7 +1,7 @@
 #!/bin/sh
 # Block pushes that contain commits with files under .local/state/.
 
-while IFS=' ' read -r local_ref local_sha remote_ref remote_sha; do
+while IFS=' ' read -r _ local_sha _ remote_sha; do
   if [ "$remote_sha" = "0000000000000000000000000000000000000000" ]; then
     range="$local_sha"
   else

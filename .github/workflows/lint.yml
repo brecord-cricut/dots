@@ -1,0 +1,52 @@
+name: Lint
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install shellcheck and stylua
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
+          curl -sSL https://github.com/JohnnyMorganz/StyLua/releases/latest/download/stylua-linux-x86_64.zip -o /tmp/stylua.zip
+          sudo unzip -o /tmp/stylua.zip -d /usr/local/bin
+          sudo chmod +x /usr/local/bin/stylua
+
+      - name: shellcheck (.sh, dialect from shebang)
+        run: |
+          files=$(git ls-files '*.sh')
+          status=0
+          for f in $files; do
+            shellcheck --exclude=SC1090,SC1091 "$f" || status=1
+          done
+          exit $status
+
+      - name: zsh syntax check (.zsh)
+        run: |
+          files=$(git ls-files '*.zsh')
+          status=0
+          for f in $files; do
+            zsh -n "$f" || { echo "SYNTAX FAIL: $f"; status=1; }
+          done
+          exit $status
+
+      - name: stylua --check (nvim lua config)
+        run: |
+          files=$(git ls-files '.config/nvim/*.lua')
+          [ -z "$files" ] && exit 0
+          stylua --check --config-path .config/nvim/stylua.toml $files
+
+      - name: JSON validity (strict .json only, not .jsonc)
+        run: |
+          files=$(git ls-files '*.json')
+          status=0
+          for f in $files; do
+            jq empty "$f" || { echo "INVALID JSON: $f"; status=1; }
+          done
+          exit $status

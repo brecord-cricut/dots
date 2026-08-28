@@ -14,7 +14,7 @@ set_wallpaper() {
 
 # If present, the first argument will be used to set the wallpaper to the provided path.
 if [ -n "$1" ]; then
-  set_wallpaper $@
+  set_wallpaper "$@"
 fi
 
 # Refresh env values

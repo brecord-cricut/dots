@@ -32,6 +32,7 @@ elif [[ "$cwd" == "$home/"* ]]; then
   IFS='/' read -ra parts <<< "$rel"
   total=${#parts[@]}
   if (( total <= 2 )); then
+    # shellcheck disable=SC2088 # literal display symbol, not meant to expand
     dir_display="~/$rel"
   else
     # Show shortened prefix components + last component
@@ -44,6 +45,7 @@ elif [[ "$cwd" == "$home/"* ]]; then
         short="$short/${parts[i]:0:1}"
       fi
     done
+    # shellcheck disable=SC2088 # literal display symbol, not meant to expand
     dir_display="~/$short/${parts[total-1]}"
   fi
 else
@@ -68,6 +70,7 @@ fi
 BRANCH_ICON=$''   # nf-dev-git_branch  
 
 git_part=""
+# shellcheck disable=SC2034 # capture swallows stdout; only exit status matters
 if git_dir=$(git -C "$cwd" rev-parse --git-dir 2>/dev/null); then
   branch=$(git -C "$cwd" symbolic-ref --short HEAD 2>/dev/null \
            || git -C "$cwd" rev-parse --short HEAD 2>/dev/null)

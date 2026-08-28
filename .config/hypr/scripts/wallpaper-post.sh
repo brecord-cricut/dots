@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2154 # background/foreground/cursor/wallpaper/colorN come from the sourced colors.sh
 
 ##
 ## This script should only be called by `wal` (not manually)
@@ -9,9 +10,10 @@
 
 # Create lock screen artifacts
 lockscreen_file="$XDG_CACHE_HOME/wal/lock.jpg"
+# shellcheck disable=SC2046 # $(cat ...) intentionally splits into multiple magick args
 magick $(cat "$XDG_CACHE_HOME/wal/wal") \
   -blur 0x15 \
-  $lockscreen_file ||
+  "$lockscreen_file" ||
   exit 1
 
 # Update tofi colors
@@ -32,13 +34,15 @@ sed 's|: | = |
   s| = \#| = rgb(|
   s|\;|)|
   s|//|\#|
-  s|wallpaper = "\(.*\)".*|wallpaper = \1|' $wal_colors_src |
+  s|wallpaper = "\(.*\)".*|wallpaper = \1|' "$wal_colors_src" |
   tail -n +2 >"$hypr_style_tmp" || exit 1
 
 # Set lock wallpaper path as a Hyprland variable
-echo "" >>"$hypr_style_tmp"
-echo "# Lockscreen wallpaper" >>"$hypr_style_tmp"
-echo "\$lock_wallpaper = $lockscreen_file" >>"$hypr_style_tmp"
+{
+  echo ""
+  echo "# Lockscreen wallpaper"
+  echo "\$lock_wallpaper = $lockscreen_file"
+} >>"$hypr_style_tmp"
 mv "$hypr_style_tmp" "$hypr_style"
 
 # Update Hyprland Lua colors (for hyprland.lua / style.lua)
