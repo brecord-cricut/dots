@@ -17,7 +17,6 @@ dflg() { env "${DOTS_PREFIX[@]}" lazygit "$@"; }
 dots() { env "${DOTS_PREFIX[@]}" git "$@"; }
 
 ((${+commands[claude]})) && alias cl="claude"
-((${command[lazydocker]})) && alias ld="lazydocker"
-((${command[opencode]})) && alias oc="OPENCODE=1 command opencode"
-((${command[tmux]})) && alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
-((${command[wget]})) && alias wget="wget --hsts-file=$XDG_CACHE_HOME/wget-hsts"
+((${+commands[lazydocker]})) && alias ld="lazydocker"
+((${+commands[tmux]})) && alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
+((${+commands[wget]})) && alias wget="wget --hsts-file=$XDG_CACHE_HOME/wget-hsts"
