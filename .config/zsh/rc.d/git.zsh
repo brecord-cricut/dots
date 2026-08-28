@@ -10,7 +10,6 @@ if [[ -z "$GIT_AUTHOR_NAME" || -z "$GIT_AUTHOR_EMAIL" ]]; then
     return 1
   fi
   local env_path="$ZSH_STATE/env/git.zsh"
-  [[ -d "$(dirname $env_path)" ]] || mkdir -p "$(dirname $env_path)"
   cat <<-EOF >"$env_path"
 			export GIT_AUTHOR_NAME="$git_name"
 			export GIT_AUTHOR_EMAIL="$git_email"
