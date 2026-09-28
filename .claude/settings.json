@@ -31,7 +31,6 @@
       "Bash(rm -rf *)"
     ]
   },
-  "model": "sonnet",
   "worktree": {
     "baseRef": "fresh"
   },
