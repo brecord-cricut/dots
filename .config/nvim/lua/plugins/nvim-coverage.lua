@@ -85,7 +85,5 @@ return {
     { "<leader>tch", function() require("coverage").hide() end, desc = "Hide Coverage" },
     { "<leader>tcw", function() require("coverage").show() end, desc = "Show Coverage" },
     { "<leader>tcC", function() require("coverage").clear() end, desc = "Clear Coverage" },
-    { "]c", function() require("coverage").jump_next("uncovered") end, desc = "Next Uncovered" },
-    { "[c", function() require("coverage").jump_prev("uncovered") end, desc = "Prev Uncovered" },
   },
 }
