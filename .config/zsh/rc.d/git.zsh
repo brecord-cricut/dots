@@ -21,6 +21,21 @@ if [[ -z "$GIT_AUTHOR_NAME" || -z "$GIT_AUTHOR_EMAIL" ]]; then
   unset -v env_path git_name git_email
 fi
 
+wtadd_post_hook() {
+  # Repo-specific post-checkout setup can be defined privately, e.g. in
+  # $ZSH_STATE/rc/git.zsh, as a `wtadd_post_hook_{repo}` function, where
+  # {repo} is the parent directory's basename
+  local repo
+  repo="$(basename "$(realpath ..)")"
+  local hook="wtadd_post_hook_${repo//[^a-zA-Z0-9_]/_}"
+  if typeset -f "$hook" >/dev/null; then
+    echo ":: Executing worktree add hook for $repo"
+    "$hook"
+  else
+    echo ":: No post hook found for $(basename "$(pwd)")"
+  fi
+}
+
 wtadd() {
   local dir branch
   if [[ $# -eq 2 ]]; then
@@ -36,14 +51,5 @@ wtadd() {
   git -C .git worktree add "../$dir" -b "$branch" || return 1
   cd "$dir" || return 1
 
-  # Repo-specific post-checkout setup can be defined privately, e.g. in
-  # $ZSH_STATE/rc/git.zsh, as a `wtadd_post_hook_{repo}` function, where
-  # {repo} is the parent directory's basename
-  local repo
-  repo="$(basename "$(realpath ..)")"
-  local hook="wtadd_post_hook_${repo//[^a-zA-Z0-9_]/_}"
-  if typeset -f "$hook" >/dev/null; then
-    echo ":: Executing worktree add hook for $repo"
-    "$hook"
-  fi
+  wtadd_post_hook
 }
