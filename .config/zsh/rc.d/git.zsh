@@ -66,7 +66,7 @@ wtadd() {
     branch="${subject}"
   fi
 
-  git -C .git worktree add "../$dir" -b "$branch" || return 1
+  git worktree add "../$dir" -b "$branch" || return 1
   cd "$dir" || return 1
 
   wtadd_post_hook

@@ -13,7 +13,6 @@ setopt INC_APPEND_HISTORY_TIME # write immediately + after each command (best of
 setopt SHARE_HISTORY           # share history across all live zsh sessions
 
 typeset -gU HISTORY_IGNORE_COMMANDS   # -g = global, -U = unique (no dups)
-[[ $cmd == (ls|ll|la|l|cd|pwd|exit|date|clear|bg|fg) ]] && return 1
 HISTORY_IGNORE_COMMANDS=(
   bg fg jobs
   cd .. .. ... .... .....

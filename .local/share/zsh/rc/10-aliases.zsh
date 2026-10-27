@@ -27,11 +27,6 @@ else
   alias la='ls -AG'
 fi
 
-# macOS still ships BSD tools without --color, so force it when possible
-if [[ $OSTYPE == darwin* ]]; then
-  ((${+commands[glsd]})) || alias ls='ls -G'
-fi
-
 # Safer core utilities
 alias cp='cp -iv'
 alias mv='mv -iv'
@@ -41,26 +36,15 @@ alias ln='ln -v'
 # Modern replacements
 ((${+commands[bat]})) && alias cat='bat --style=plain'
 ((${+commands[batcat]})) && alias cat='batcat --style=plain' # Ubuntu name
-((${+commands[btop]})) && alias top='btop'
 ((${+commands[delta]})) && alias diff='delta'
 ((${+commands[dust]})) && alias du='dust'
 ((${+commands[fd]})) && alias find='fd'
 ((${+commands[htop]})) && alias top='htop'
+((${+commands[btop]})) && alias top='btop' # preferred over htop
 ((${+commands[moor]})) && alias less='moor'
 ((${+commands[ncdu]})) && alias ncdu='ncdu --color dark'
 ((${+commands[procs]})) && alias ps='procs'
 ((${+commands[rg]})) && alias grep='rg'
-
-# macOS still ships BSD tools without --color, so force it when possible
-if [[ $OSTYPE == darwin* ]]; then
-  ((${+commands[glsd]})) || alias ls='ls -G'
-fi
-
-if ((${+commands[nproc]})); then
-  alias make='make -j$(( $(nproc) + 1 ))'
-elif ((${+commands[ncpus]})); then # macOS
-  alias make='make -j$(( $(ncpus) + 1 ))'
-fi
 
 if [[ $OSTYPE == linux* ]] && ((${+commands[xdg-open]})); then
   alias open='xdg-open'

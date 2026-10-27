@@ -5,12 +5,15 @@
 : ${XDG_RUNTIME_DIR:=/run/user/$UID}
 
 if [[ ! -d $XDG_RUNTIME_DIR || ! -w $XDG_RUNTIME_DIR ]]; then
-  if [[ $OSTYPE == darwin* ]] && dir=$(getconf DARWIN_USER_TEMP_DIR 2>/dev/null) && [[ -d $dir ]]; then
-    XDG_RUNTIME_DIR=$dir
-  else
-    XDG_RUNTIME_DIR=$XDG_CACHE_HOME/zsh-runtime
-    mkdir -pm 700 $XDG_RUNTIME_DIR
-  fi
+  () {
+    local dir
+    if [[ $OSTYPE == darwin* ]] && dir=$(getconf DARWIN_USER_TEMP_DIR 2>/dev/null) && [[ -d $dir ]]; then
+      XDG_RUNTIME_DIR=$dir
+    else
+      XDG_RUNTIME_DIR=$XDG_CACHE_HOME/zsh-runtime
+      mkdir -pm 700 $XDG_RUNTIME_DIR
+    fi
+  }
 fi
 
 export XDG_CACHE_HOME XDG_CONFIG_HOME XDG_DATA_HOME XDG_STATE_HOME XDG_RUNTIME_DIR

@@ -1,20 +1,22 @@
 autoload -Uz compinit
 
-# Regenerate zcompdump only if it's older than 24 hours or missing
-zcompdump="${ZSH_CACHE}/zcompdump"
-if [[ -n ${zcompdump}(#qN.mh+24) ]]; then
-  compinit -d "$zcompdump"
-  # Compile the dump into .zwc for faster loading next time
-  zcompile "$zcompdump" 2>/dev/null
-else
-  # Skip compaudit — huge speedup on every shell start
-  compinit -C -d "$zcompdump"
-fi
+# Full compinit (with compaudit) only if the dump is missing or older than 24h;
+# otherwise -C skips the audit, which is the bulk of startup cost.
+() {
+  local zcompdump="$ZSH_CACHE/zcompdump"
+  if [[ -f $zcompdump && -z ${zcompdump}(#qN.mh+24) ]]; then
+    compinit -C -d "$zcompdump"
+  else
+    compinit -d "$zcompdump"
+    # Compile the dump into .zwc for faster loading next time
+    zcompile "$zcompdump" 2>/dev/null
+  fi
+}
 
 zstyle ':completion:*' menu select                     # arrow-key driven menu
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}" # colored completion lists
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*' # case-insensitive + partial
-zstyle ':completion:*' completer _expand _complete _correct _approximate
+zstyle ':completion:*' completer _expand _complete _match _correct _approximate
 zstyle ':completion:*' expand prefix suffix
 zstyle ':completion:*' squeeze-slashes true            # cd /u/lo/b<tab> → /usr/local/bin
 zstyle ':completion:*' special-dirs false              # don't show . or .. in completion
@@ -26,7 +28,6 @@ zstyle ':completion:*' verbose true
 
 # Show dots while completing (feels snappier)
 zstyle ':completion:*' show-completer true
-zstyle ':completion:*' completer _complete _match _approximate
 zstyle ':completion:*:approximate:*' max-errors 1 numeric
 
 # Better process listing (kill, pgrep, etc.)

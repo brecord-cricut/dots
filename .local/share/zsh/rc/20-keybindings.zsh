@@ -1,5 +1,5 @@
 bindkey -v
-export KEYTIMEOUT=1
+export KEYTIMEOUT=20 # 200ms: low enough for snappy Esc, high enough for the jk/kj binds below
 
 # Better history search
 autoload -Uz up-line-or-beginning-search down-line-or-beginning-search
@@ -26,11 +26,6 @@ bindkey -M viins '^K' kill-line          # Ctrl-K
 
 # Better backspace in insert mode
 bindkey -M viins '^?' backward-delete-char # sometimes needed on macOS
-
-# Bonus tiny widgets everyone copies
-zle -N select-in-word
-bindkey -M visual 'iw' select-in-word
-bindkey -M visual 'aw' select-a-word
 
 # Jump to beginning/end of line in normal mode (like vim’s 0 and $)
 bindkey -M vicmd '^' beginning-of-line

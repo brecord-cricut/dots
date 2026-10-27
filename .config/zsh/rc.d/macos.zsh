@@ -1,7 +1,5 @@
 [[ $OSTYPE != darwin* ]] && return 0
 
-alias ls="ls -G"
-
 symlink_config_dir() {
   local name="$1"
   if [[ -z "$name" ]]; then
@@ -50,5 +48,6 @@ unset -f symlink_config_dir
 [[ -n "$EDITOR" ]] && launchctl setenv EDITOR $EDITOR
 [[ -n "$PAGER" ]] && launchctl setenv PAGER $PAGER
 
-# For some reason mac opens the terminal at the root directory
-cd "$HOME"
+# Terminal.app starts login shells at / ; don't clobber the cwd of
+# every other interactive shell (new kitty tabs, tmux splits, subshells).
+[[ -o login && $PWD == / ]] && cd "$HOME"

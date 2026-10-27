@@ -1,5 +1,4 @@
 local plugin_home="$ZSH_STATE/plugins"
-local plugin_lock="$ZSH_CACHE/.plugins-installed"
 
 local -a plugins=(
   https://github.com/hlissner/zsh-autopair
@@ -10,35 +9,24 @@ local -a plugins=(
   https://github.com/Aloxaf/fzf-tab
 )
 
-# Plugins that must be sourced after compinit
+# Plugins that must be sourced after compinit; see 35-fzf.zsh
 local -a deferred_plugins=(
   fzf-tab
 )
 
-local repo
-
-if [[ ! -f "$plugin_lock" ]]; then
-  _clone() {
-    local repo=$1
-    local name=${repo##*/}
-    [[ -d "$plugin_home/$name" ]] && return
-    echo "Installing $name..."
-    git clone --depth 1 "$repo" "$plugin_home/$name" >/dev/null 2>&1
-  }
-
-  for repo in "${plugins[@]}"; do
-    _clone "$repo"
-  done
-
-  mkdir -p $ZSH_CACHE 2> /dev/null ; touch "$plugin_lock"
-fi
-
+local repo= name= dir=
 for repo in "${plugins[@]}"; do
-  local name=${repo##*/}
-  local dir="$plugin_home/$name"
-  [[ "${deferred_plugins[(Ie)$name]}" -gt 0 ]] && continue
-  [[ -f "$dir/${name:t}.zsh" ]] && source "$dir/${name:t}.zsh"
-  [[ -f "$dir/${name:t}.plugin.zsh" ]] && source "$dir/${name:t}.plugin.zsh"
+  name=${repo##*/}
+  dir="$plugin_home/$name"
+
+  if [[ ! -d "$dir" ]]; then
+    echo "Installing $name..."
+    git clone --depth 1 "$repo" "$dir" >/dev/null 2>&1
+  fi
+
+  (( ${deferred_plugins[(Ie)$name]} )) && continue
+  [[ -f "$dir/$name.zsh" ]] && source "$dir/$name.zsh"
+  [[ -f "$dir/$name.plugin.zsh" ]] && source "$dir/$name.plugin.zsh"
 done
 
-unset -v dir plugin_home plugin_lock plugins repo deferred_plugins
+unset -v plugin_home plugins deferred_plugins repo name dir
