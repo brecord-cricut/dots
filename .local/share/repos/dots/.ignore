@@ -1,0 +1,6 @@
+# Un-hide dotfiles for ripgrep / fd / fzf-driven tools (telescope, snacks, etc.)
+# so this dotfiles repo browses like a normal project.
+!.*
+
+# ...except these
+.git
