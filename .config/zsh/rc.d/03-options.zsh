@@ -5,10 +5,6 @@ setopt PUSHD_IGNORE_DUPS # don’t push duplicates
 setopt PUSHD_SILENT      # no “~1  ~2” output on every cd
 setopt CDABLE_VARS       # cd @foo works if @foo is a variable containing a path
 
-# History (extra options that belong here, not in 01-history.zsh)
-setopt EXTENDED_HISTORY # save timestamp+duration (we already have this, but safe)
-setopt SHARE_HISTORY    # already in 01-history.zsh — duplicate is harmless
-
 # Globbing & filename handling
 setopt EXTENDED_GLOB     # #, ~, ^ operators in patterns
 setopt GLOB_DOTS         # match dotfiles without .*

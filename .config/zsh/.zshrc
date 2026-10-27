@@ -1,6 +1,7 @@
 [[ -o interactive ]] || return 0
 
-for f in {"$ZSH_DATA"/rc,"$ZSH_STATE"/rc,"$ZDOTDIR"/rc.d}/*.zsh(N); do
+# Tracked fragments first, machine-local ones last so they can override.
+for f in {"$ZDOTDIR"/rc.d,"$ZSH_STATE"/rc}/*.zsh(N); do
   . "$f"
 done
 unset -v f

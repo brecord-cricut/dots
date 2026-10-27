@@ -1,3 +1,6 @@
+# Plugin configuration
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=1'
+
 local plugin_home="$ZSH_STATE/plugins"
 
 local -a plugins=(

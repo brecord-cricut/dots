@@ -41,11 +41,11 @@ jobs:
             TERM=xterm-256color GIT_AUTHOR_NAME=ci GIT_AUTHOR_EMAIL=ci@example.com \
             zsh -li -c 'echo ZSH_BOOT_OK; exit 0'
 
-      # These two steps source rc.d/aliases.zsh directly (not a full -li boot)
+      # These two steps source rc.d/10-aliases.zsh directly (not a full -li boot)
       # so the result only depends on PATH, not on whatever the runner's real
       # package manager (e.g. Homebrew on macos-latest) happens to have
       # pre-installed — a full boot would re-inject the runner's real
-      # /opt/homebrew/bin via env/10_homebrew.zsh and mask a broken guard.
+      # /opt/homebrew/bin via env.d/10-homebrew.zsh and mask a broken guard.
       - name: Guarded aliases ARE defined when their tool is on PATH
         run: |
           shim_dir="$RUNNER_TEMP/shims"
@@ -56,7 +56,7 @@ jobs:
           done
           env -i HOME="$GITHUB_WORKSPACE" PATH="$shim_dir:/usr/bin:/bin" \
             ZDOTDIR="$GITHUB_WORKSPACE/.config/zsh" \
-            zsh -c 'source .config/zsh/rc.d/aliases.zsh
+            zsh -c 'source .config/zsh/rc.d/10-aliases.zsh
               alias ld >/dev/null && alias cl >/dev/null && alias tmux >/dev/null && alias wget >/dev/null && echo ALIASES_DEFINED_OK'
 
       - name: Guarded aliases are ABSENT when their tool is missing
@@ -70,7 +70,7 @@ jobs:
           zsh_bin=$(command -v zsh)
           out=$(env -i HOME="$GITHUB_WORKSPACE" PATH="$empty_dir" \
             ZDOTDIR="$GITHUB_WORKSPACE/.config/zsh" \
-            "$zsh_bin" -c 'source .config/zsh/rc.d/aliases.zsh
+            "$zsh_bin" -c 'source .config/zsh/rc.d/10-aliases.zsh
               (alias ld || alias cl || alias tmux || alias wget) >/dev/null 2>&1 && echo UNEXPECTED_ALIAS || echo ALIASES_ABSENT_OK')
           echo "$out"
           [ "$out" = "ALIASES_ABSENT_OK" ]

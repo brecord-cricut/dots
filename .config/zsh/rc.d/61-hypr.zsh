@@ -1,14 +1,3 @@
-hyprc() {
-  cd "$XDG_CONFIG_HOME/hypr"
-  case "$1" in
-  "d") pwd ;;
-  *)
-    env "${DOTS_PREFIX[@]}" nvim
-    cd - >/dev/null
-    ;;
-  esac
-}
-
 if command -v start-hyprland >/dev/null; then
   if [ ! -f "$XDG_CONFIG_HOME/hypr/style.conf" ]; then
     wallpaper="$(find "$XDG_DATA_HOME/wallpapers" -maxdepth 1 -type f | head -n 1)"
