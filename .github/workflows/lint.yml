@@ -13,7 +13,7 @@ jobs:
       - name: Install shellcheck and stylua
         run: |
           sudo apt-get update
-          sudo apt-get install -y shellcheck
+          sudo apt-get install -y shellcheck zsh
           curl -sSL https://github.com/JohnnyMorganz/StyLua/releases/latest/download/stylua-linux-x86_64.zip -o /tmp/stylua.zip
           sudo unzip -o /tmp/stylua.zip -d /usr/local/bin
           sudo chmod +x /usr/local/bin/stylua

@@ -60,10 +60,17 @@ jobs:
               alias ld >/dev/null && alias cl >/dev/null && alias tmux >/dev/null && alias wget >/dev/null && echo ALIASES_DEFINED_OK'
 
       - name: Guarded aliases are ABSENT when their tool is missing
+        # PATH has to point at a directory that is genuinely empty. /usr/bin:/bin
+        # is not "missing": the ubuntu images ship wget and tmux there, so the
+        # guards fire correctly and the assertion fails anyway. Resolve zsh to an
+        # absolute path first, since the empty PATH can no longer find it.
         run: |
-          out=$(env -i HOME="$GITHUB_WORKSPACE" PATH=/usr/bin:/bin \
+          empty_dir="$RUNNER_TEMP/empty-path"
+          mkdir -p "$empty_dir"
+          zsh_bin=$(command -v zsh)
+          out=$(env -i HOME="$GITHUB_WORKSPACE" PATH="$empty_dir" \
             ZDOTDIR="$GITHUB_WORKSPACE/.config/zsh" \
-            zsh -c 'source .config/zsh/rc.d/aliases.zsh
+            "$zsh_bin" -c 'source .config/zsh/rc.d/aliases.zsh
               (alias ld || alias cl || alias tmux || alias wget) >/dev/null 2>&1 && echo UNEXPECTED_ALIAS || echo ALIASES_ABSENT_OK')
           echo "$out"
           [ "$out" = "ALIASES_ABSENT_OK" ]

@@ -32,7 +32,7 @@ jobs:
         # The includeIf in ~/.config/git/config can't match before this very
         # checkout writes that file to disk, so no hooks should fire here.
         run: |
-          dots() { env HOME="$SCRATCH_HOME" GIT_DIR="$SCRATCH_HOME/.local/share/repos/dots/.git" GIT_WORK_TREE="$SCRATCH_HOME" git "$@"; }
+          dots() { env -u XDG_CONFIG_HOME -u XDG_CACHE_HOME -u XDG_DATA_HOME -u XDG_STATE_HOME HOME="$SCRATCH_HOME" GIT_DIR="$SCRATCH_HOME/.local/share/repos/dots/.git" GIT_WORK_TREE="$SCRATCH_HOME" git "$@"; }
           dots config --local status.showUntrackedFiles false
           out=$(dots checkout 2>&1)
           echo "$out"
@@ -45,7 +45,7 @@ jobs:
 
       - name: Second checkout — bootstrap hook must fire and create XDG dirs
         run: |
-          dots() { env HOME="$SCRATCH_HOME" GIT_DIR="$SCRATCH_HOME/.local/share/repos/dots/.git" GIT_WORK_TREE="$SCRATCH_HOME" git "$@"; }
+          dots() { env -u XDG_CONFIG_HOME -u XDG_CACHE_HOME -u XDG_DATA_HOME -u XDG_STATE_HOME HOME="$SCRATCH_HOME" GIT_DIR="$SCRATCH_HOME/.local/share/repos/dots/.git" GIT_WORK_TREE="$SCRATCH_HOME" git "$@"; }
           out=$(dots checkout 2>&1)
           echo "$out"
           echo "$out" | grep -qi "post-checkout: initializing submodules" || { echo "::error::bootstrap hook did not fire on the second checkout"; exit 1; }
@@ -56,7 +56,7 @@ jobs:
 
       - name: pre-commit — blocks a staged secret
         run: |
-          dots() { env HOME="$SCRATCH_HOME" GIT_DIR="$SCRATCH_HOME/.local/share/repos/dots/.git" GIT_WORK_TREE="$SCRATCH_HOME" git "$@"; }
+          dots() { env -u XDG_CONFIG_HOME -u XDG_CACHE_HOME -u XDG_DATA_HOME -u XDG_STATE_HOME HOME="$SCRATCH_HOME" GIT_DIR="$SCRATCH_HOME/.local/share/repos/dots/.git" GIT_WORK_TREE="$SCRATCH_HOME" git "$@"; }
           echo 'AKIAABCDEFGHIJKLMNOP' > "$SCRATCH_HOME/secret-probe.txt"
           dots add secret-probe.txt
           if dots -c user.name=ci -c user.email=ci@example.com commit -m "should be blocked" >/tmp/secret-commit.log 2>&1; then
@@ -70,7 +70,7 @@ jobs:
 
       - name: pre-commit — blocks and unstages a file under .local/state/
         run: |
-          dots() { env HOME="$SCRATCH_HOME" GIT_DIR="$SCRATCH_HOME/.local/share/repos/dots/.git" GIT_WORK_TREE="$SCRATCH_HOME" git "$@"; }
+          dots() { env -u XDG_CONFIG_HOME -u XDG_CACHE_HOME -u XDG_DATA_HOME -u XDG_STATE_HOME HOME="$SCRATCH_HOME" GIT_DIR="$SCRATCH_HOME/.local/share/repos/dots/.git" GIT_WORK_TREE="$SCRATCH_HOME" git "$@"; }
           mkdir -p "$SCRATCH_HOME/.local/state/probe"
           echo x > "$SCRATCH_HOME/.local/state/probe/leaked.txt"
           dots add -f .local/state/probe/leaked.txt
@@ -86,7 +86,7 @@ jobs:
 
       - name: pre-commit — a normal commit still succeeds
         run: |
-          dots() { env HOME="$SCRATCH_HOME" GIT_DIR="$SCRATCH_HOME/.local/share/repos/dots/.git" GIT_WORK_TREE="$SCRATCH_HOME" git "$@"; }
+          dots() { env -u XDG_CONFIG_HOME -u XDG_CACHE_HOME -u XDG_DATA_HOME -u XDG_STATE_HOME HOME="$SCRATCH_HOME" GIT_DIR="$SCRATCH_HOME/.local/share/repos/dots/.git" GIT_WORK_TREE="$SCRATCH_HOME" git "$@"; }
           before=$(dots rev-parse HEAD)
           echo "harmless" > "$SCRATCH_HOME/harmless-probe.txt"
           dots add harmless-probe.txt
