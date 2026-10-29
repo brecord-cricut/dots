@@ -28,5 +28,6 @@
 [include]
   path = ~/.local/state/git/config
 
-[includeIf "gitdir:~/.local/share/repos/dots/.git"]
-  path = ~/.config/git/dots.config
+# Per-repo hooks for everything under repos/, dispatched by repo name
+[includeIf "gitdir:~/.local/share/repos/"]
+  path = ~/.config/git/hooks.config

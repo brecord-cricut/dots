@@ -21,7 +21,7 @@ if ! git config --get user.email >/dev/null 2>&1; then
   print -u2 "git: no user.email configured; run \`git-identity\` to set it."
 fi
 
-DOTS_PREFIX=(GIT_DIR=$REPOS/dots/.git GIT_WORK_TREE=$HOME)
+DOTS_PREFIX=(GIT_DIR="$REPOS/dots/.git" GIT_WORK_TREE="$HOME")
 
 if command -v lazygit >/dev/null; then
   lazygit() {
@@ -39,21 +39,6 @@ fi
 dflg() { env "${DOTS_PREFIX[@]}" lazygit "$@"; }
 dots() { env "${DOTS_PREFIX[@]}" git "$@"; }
 
-wtadd_post_hook() {
-  # Repo-specific post-checkout setup can be defined privately, e.g. in
-  # $ZSH_STATE/rc/git.zsh, as a `wtadd_post_hook_{repo}` function, where
-  # {repo} is the parent directory's basename
-  local repo
-  repo="$(basename "$(realpath ..)")"
-  local hook="wtadd_post_hook_${repo//[^a-zA-Z0-9_]/_}"
-  if typeset -f "$hook" >/dev/null; then
-    echo ":: Executing worktree add hook for $repo"
-    "$hook"
-  else
-    echo ":: No post hook found for $(basename "$(pwd)")"
-  fi
-}
-
 wtadd() {
   local dir branch
   if [[ $# -eq 2 ]]; then
@@ -66,12 +51,6 @@ wtadd() {
     branch="${subject}"
   fi
 
-  git worktree add "../$dir" -b "$branch" || return 1
+  git worktree add "$dir" -b "$branch" || return 1
   cd "$dir" || return 1
-
-  wtadd_post_hook
-}
-
-wtadd_post_hook_dots() {
-  git submodule update --init --recursive --depth 1
 }

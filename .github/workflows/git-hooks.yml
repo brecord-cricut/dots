@@ -41,7 +41,7 @@ jobs:
             exit 1
           fi
           hp=$(dots config --get core.hooksPath 2>/dev/null || true)
-          [ "$hp" = "~/.config/git/dots-hooks" ] || { echo "::error::hooksPath not visible after first checkout wrote ~/.config/git/config (got: $hp)"; exit 1; }
+          [ "$hp" = "~/.config/git/hooks" ] || { echo "::error::hooksPath not visible after first checkout wrote ~/.config/git/config (got: $hp)"; exit 1; }
 
       - name: Second checkout — bootstrap hook must fire and create XDG dirs
         run: |

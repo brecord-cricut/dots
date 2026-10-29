@@ -29,7 +29,7 @@ jobs:
         # (.config, .local, .zshenv) is written relative to $HOME.
         # env -i so a pre-exported XDG_CACHE_HOME etc. on the runner can't
         # mask a broken default in the script (its `:=` only fires if unset).
-        run: env -i HOME="$GITHUB_WORKSPACE" PATH=/usr/bin:/bin sh .config/git/dots-hooks/post-checkout.d/10-bootstrap.sh
+        run: env -i HOME="$GITHUB_WORKSPACE" PATH=/usr/bin:/bin sh .config/git/hooks/dots/post-checkout.d/10-bootstrap.sh
 
       - name: Boot zsh non-interactively-forced-interactive
         # .zshrc bails immediately unless the shell is interactive, so `-i` is
